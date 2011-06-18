@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--//<html manifest="socketbug.manifest">/-->
+<html>
+	<head>
+		<title>Socketbug Console</title>
+		
+		<link rel="stylesheet" type="text/css" href="css/socketbug_console.css" />
+		<link rel="stylesheet" type="text/css" href="css/sh/shCore.css" /> 
+  		<link rel="stylesheet" type="text/css" href="css/sh/shThemeDefault.css" />
+		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
+		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery.ui.selectmenu.css" />
+
+	</head>
+	<body>
+		<div id="run">
+			<select name="command_list" id="command_list"> 
+				<option value="list" selected="selected">SOCKETBUG COMMAND LIST:</option> 
+				<option value="view_source">Fetch Remote Source Code</option> 
+			</select> 
+			<button type="button" id="run_command">GO</button>
+		</div>
+		
+		<div id="status">
+			<img src="img/spinner.gif" id="loading" />Socketbug: <input type="checkbox" id="connect" />
+		</div>
+		
+		<input type="text" name="command" id="command" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type some Javascript to send to Socketbug..." />
+		<div class="tips">Start typing to autocomplete &nbsp;&nbsp;|&nbsp;&nbsp; Press enter to process javascript &nbsp;&nbsp;|&nbsp;&nbsp; Double click to clear input</div>
+		
+		<div id="source_code"><button type="button" id="close_source" title="Close Source Code Window">Close Source Code Window</button></div>
+		
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/checkboxes.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.selectmenu.js"></script>
+		
+		<script type="text/javascript" src="js/socket.io.js"></script>
+		<script type="text/javascript" src="js/socketbug_console.js"></script>		
+		
+		<script type="text/javascript" src="js/sh/XRegExp.js"></script>
+		<script type="text/javascript" src="js/sh/shCore.js"></script> 
+		<script type="text/javascript" src="js/sh/shBrushXml.js"></script> 
+		<script type="text/javascript" src="js/sh/shBrushJScript.js"></script> 
+		<script type="text/javascript" src="js/sh/shBrushCss.js"></script>
+		
+	</body>
+</html>

@@ -1,0 +1,6 @@
+CACHE MANIFEST
+#Version 0.1.000
+CACHE:
+js/socket.io.js
+js/socketbug_console.js
+index.html
