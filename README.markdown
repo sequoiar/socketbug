@@ -8,8 +8,6 @@
 
 **![Twitter ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)**
 
----
-
 #Installing Socketbug - The Server
 
 ## #1 Build and Install Node.js
