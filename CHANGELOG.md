@@ -1,4 +1,4 @@
-![Socketbug Logo](http://github.socketbug.com/logo.png "Socketbug - Web Socket Remote Debuggin")
+![Socketbug Logo](http://github.socketbug.com/logo.png "Socketbug - Web Socket Remote Debugging")
 
 ![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
 
