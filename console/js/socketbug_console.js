@@ -44,6 +44,33 @@ if(typeof(socketbug) === 'undefined')
 		/* Setup Socket.io to Listen to Server */
 		io: new io.Socket('localhost', { port: 8080, rememberTransport: false }),
 		
+		/* Setup Ouput Log for Console */
+		log: function(message, level)
+		{
+			var now = new Date();
+			var date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+			
+			jQuery('#output ul li').removeClass('recent');
+			
+			switch(level)
+			{
+				case 'warn':
+					jQuery('#output ul').prepend('<li class="recent"><span>[ ' + date + ' ]</span> <span class="warn">' + message + '</span></li>');
+					debug.warn(message);
+					break;
+					
+				case 'error':
+					jQuery('#output ul').prepend('<li class="recent"><span>[ ' + date + ' ]</span> <span class="error">' + message + '</span></li>');
+					debug.error(message);
+					break;
+					
+				default:
+					jQuery('#output ul').prepend('<li class="recent"><span>[ ' + date + ' ]</span> ' + message + '</li>');
+					debug.log(message);
+			}
+			
+		},
+		
 		/* Direct Connect Method */
 		connect: function()
 		{
@@ -104,14 +131,14 @@ if(typeof(socketbug) === 'undefined')
 	/* Capture Connecting Event */
 	socketbug.io.on('connecting', function(transport_type)
 	{
-		debug.log('Connecting to Socketbug via ' + transport_type + '...');
+		socketbug.log('Connecting to Socketbug via ' + transport_type + '...');
 		socketbug.connected = false;
 	});
 
 	/* Capture Connect Event */
 	socketbug.io.on('connect', function()
 	{
-		debug.log('Socketbug Connected');
+		socketbug.log('Socketbug Connected');
 		jQuery('#connect').attr('checked', true).trigger('change');
 		socketbug.connected = true;
 		jQuery('#loading').fadeOut('slow');
@@ -137,13 +164,13 @@ if(typeof(socketbug) === 'undefined')
 				{
 					var sid = data.split(':', 2);
 			
-					debug.log('Socketbug Session ID: ' + sid[1]);
+					socketbug.log('Socketbug Session ID:&nbsp; <span class="value">' + sid[1] + '</span>');
 					
 					socketbug.session_id = sid[1];
 				}
 				else
 				{
-					debug.log(data);
+					socketbug.log(data);
 				}
 		
 				break;
@@ -155,11 +182,15 @@ if(typeof(socketbug) === 'undefined')
 				{
 					eval(data.js);
 					
-					jQuery('#command').val('');
+					socketbug.log('Received Javascript:&nbsp; <span class="value">' + data.js + '</span>');
+					
+					jQuery('#command').val('').blur();
 				}
 				else if(data.command == 'src')
-				{
+				{					
 					eval('var src = '+data.js);
+					
+					socketbug.log('Received Source Code');
 					
 					src = src.replace(/</g,'&lt;');
 					src = src.replace(/>/g,'&gt;');
@@ -181,6 +212,8 @@ if(typeof(socketbug) === 'undefined')
 					jQuery('#source_code pre').html(html);
 					
 					jQuery('#source_code').slideDown();
+					
+					jQuery('#settings').slideToggle();
 				}
 				
 				break;
@@ -192,14 +225,15 @@ if(typeof(socketbug) === 'undefined')
 	/* Capture Close Event */
 	socketbug.io.on('close', function()
 	{
-		debug.warn('Connection to Socketbug Closed');
+		socketbug.log('Connection to Socketbug Closed', 'warn');
 		socketbug.connected = false;
 	});
 
 	/* Capture Disconnect Event */
 	socketbug.io.on('disconnect', function()
 	{
-		debug.warn('Socketbug Disconnected');
+		socketbug.log('Socketbug Disconnected', 'warn');
+		
 		socketbug.connected = false;
 		jQuery('#connect').attr('checked', false).trigger('change');
 	});
@@ -207,21 +241,21 @@ if(typeof(socketbug) === 'undefined')
 	/* Capture Reconnect Event */
 	socketbug.io.on('reconnect', function(transport_type, reconnectionAttempts)
 	{
-		debug.log('Successfully Reconnected to Socketbug via ' + transport_type + ' with Attempt #' + reconnectionAttempts);
+		socketbug.log('Successfully Reconnected to Socketbug via ' + transport_type + ' with Attempt #' + reconnectionAttempts);
 		socketbug.connected = false;
 	});
 
 	/* Capture Reconnecting Event */
 	socketbug.io.on('reconnecting', function(reconnectionDelay, reconnectionAttempts)
 	{
-		debug.warn('Attempt #' + reconnectionAttempts + ' at Reconnecting to Socketbug...');
+		socketbug.log('Attempt #' + reconnectionAttempts + ' at Reconnecting to Socketbug...', 'warn');
 		socketbug.connected = false;
 	});
 
 	/* Capture Close Event */
 	socketbug.io.on('reconnect_failed', function()
 	{
-		debug.error('Failed to Reconnect to Socketbug');
+		socketbug.log('Failed to Reconnect to Socketbug', 'error');
 		socketbug.connected = false;
 	});
 	
@@ -233,29 +267,66 @@ if(typeof(socketbug) === 'undefined')
 
 var recent_commands = [
 	"alert('');",
-	"$('#')",
 	"$('')",
 	"$('').addClass('');",
+	"$('').after('');",
 	"$('').append('');",
+	"$('').appendTo('');",
+	"$('').attr('');",
+	"$('').before('');",
+	"$('').change();",
+	"$('').click();",
+	"$('').clone('');",
 	"$('').css('', '');",
+	"$('').dblclick();",
+	"$('').detach('');",
+	"$('').empty();",
 	"$('').fadeIn();",
 	"$('').fadeOut();",
+	"$('').fadeTo('slow', 0.5);",
+	"$('').fadeToggle();",
+	"$('').height();",
 	"$('').hide();",
 	"$('').html('');",
+	"$('').innerHeight();",
+	"$('').innerWidth();",
+	"$('').insertAfter('');",
+	"$('').insertBefore('');",
+	"$('').offset();",
+	"$('').outerHeight();",
+	"$('').outerWidth();",
+	"$('').position();",
 	"$('').prepend('');",
+	"$('').prependTo('');",
+	"$('').prop('');",
 	"$('').remove();",
+	"$('').removeAttr('');",
 	"$('').removeClass('');",
+	"$('').removeProp();",
+	"$('').replaceAll('');",
+	"$('').replaceWith('');",
+	"$('').scrollLeft();",
+	"$('').scrollTop();",
+	"$('').serialize();",
+	"$('').serializeArray();",
 	"$('').show();",
+	"$('').size();",
 	"$('').slideDown();",
 	"$('').slideToggle();",
 	"$('').slideUp();",
+	"$('').stop();",
+	"$('').submit();",
 	"$('').text('');",
+	"$('').toArray();",
 	"$('').toggle();",
 	"$('').toggleClass('');",
 	"$('').trigger('');",
+	"$('').unwrap();",
 	"$('').val('');",
-	"$('.')"
-
+	"$('').width();",
+	"$('').wrap('');",
+	"$('').wrapAll('');",
+	"$('').wrapInner('');"
 ];
 
 jQuery(document).ready(function()
@@ -263,19 +334,31 @@ jQuery(document).ready(function()
 	var connect_checkbox = jQuery('#connect').iphoneStyle({ checkedLabel: 'On', uncheckedLabel: 'Off' });
 	
 	jQuery("#command").autocomplete({
-		source: recent_commands
+		source: recent_commands,
+		minLength: 0,
+		position: 
+		{ 
+			my : "left bottom", 
+			at: "left top"
+		}
 	});
+	
+	jQuery('#output_tab a').click(function(){ jQuery('#output').slideToggle(); });
+	
+	jQuery('#settings_tab a').click(function(){ jQuery('#settings').slideToggle(); });
+	
+	jQuery('#output a.clear').click(function(){ jQuery('#output ul li').remove(); });
 	
 	jQuery("button").button();
 	
 	jQuery('#connect').change(function(){
-		if(socketbug.connected)
-		{
-			socketbug.disconnect();
-		}
-		else if( !socketbug.connected)
+		if( !socketbug.connected && jQuery('#connect:checked').val() == 'on')
 		{
 			socketbug.connect();
+		}
+		else if(socketbug.connected && !jQuery('#connect:checked').val())
+		{
+			socketbug.disconnect();
 		}
 	});
 	
@@ -322,5 +405,13 @@ jQuery(document).ready(function()
 	
 	jQuery('#command').dblclick(function(){
 		jQuery('#command').val('');
+	});
+	
+	jQuery('#command').focus(function(){
+		jQuery('#command_line div').addClass('focus');
+	});
+	
+	jQuery('#command').blur(function(){
+		jQuery('#command_line div').removeClass('focus');
 	});
 });
