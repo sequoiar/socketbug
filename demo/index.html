@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<!--<html manifest="socketbug.manifest">-->
 <html>
 	<head>
 		<title>Socketbug</title>
 		
-		<!-- Load Socketbug Styles -->
-		<link rel="stylesheet" type="text/css" href="css/socketbug_application.css" />
+		<!-- Load Socketbug Styles ( Not Required for Socketbug ) -->
+		<link rel="stylesheet" type="text/css" href="css/socketbug_demo.css" />
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		
-		<!-- Setup Mobile Device Support -->
+		<!-- Setup Mobile Device Support ( Not Required for Socketbug ) -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -18,53 +17,102 @@
 		<link rel="apple-touch-startup-image" sizes="748x1024" href="img/splash.jpg" />
 		<link rel="apple-touch-startup-image" href="img/splash_port.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
 		<link rel="apple-touch-startup-image" sizes="768x1004" href="img/splash_port.jpg" />
+		
+		<!-- Load jQuery just for playing around in Demo ( Not Required for Socketbug ) -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+		
+		<!-- Test functionality to show when Socketbug is loaded ( Not Required for Socketbug ) -->
+		<script type="text/javascript">
+		var sb_loaded = false;
+		function check_sb()
+		{
+			if(typeof(socketbug) != 'undefined' && !sb_loaded)
+			{
+				if(socketbug.session_id)
+				{
+					debug.log('Socketbug Loaded');
+					$('#status').html('Socketbug Connected with Session ID:&nbsp; ' + socketbug.session_id);
+				}
+				else
+				{
+					$('#status').html('<span class="error">Socketbug Failed to Connect</span>');
+				}
+				
+				sb_loaded = true;
+			}
+			else
+			{
+				setTimeout(check_sb, 500);
+				console.log('Connecting to Socketbug...');
+				$('#status').html('Connecting to Socketbug...');
+			}
+		}
+		check_sb();
+		
+		function socketbug_callback()
+		{
+			alert('Callback Loaded');
+		}
+		</script>
 
 	</head>
 	<body>
-		<!-- Setup Socketbug Console Watermark -->
+		<!-- Setup Socketbug Console Watermark ( Not Required for Socketbug ) -->
 		<div id="watermark"></div>
 		
-		<!-- Socketbug Demo Playground -->
+		<!-- Socketbug Demo Playground ( Not Required for Socketbug ) -->
 		<div id="playground">
+			<h1>Socketbug #playground</h1>
+
+			<button onclick="debug.debug('User Clicked Debug Text Button');">Debug Text</button>
+			<button onclick="debug.debug({ 'Message': 'User Clicked Debug Object Button' });">Debug Object</button>
+			<br />
+			<button onclick="debug.log('User Clicked Log Text Button');">Log Text</button>
+			<button onclick="debug.log({ 'Message': 'User Clicked Log Object Button' });">Log Object</button>
+			<br />
+			<button onclick="debug.info('User Clicked Info Text Button');">Info Text</button>
+			<button onclick="debug.info({ 'Message': 'User Clicked Info Object Button' });">Info Object</button>
+			<br />
+			<button onclick="debug.warn('User Clicked Warn Text Button');">Warn Text</button>
+			<button onclick="debug.warn({ 'Message': 'User Clicked Warn Object Button' });">Warn Object</button>
+			<br />
+			<button onclick="debug.error('User Clicked Error Text Button');">Error Text</button>
+			<button onclick="debug.error({ 'Message': 'User Clicked Error Object Button' });">Error Object</button>
+			<br />
 			
-			This DIV has the ID of #playground
-			
+			<div id="status">Connecting to Socketbug...</div>
 		</div>
-				
-		<!-- Setup Socketbug -->
+		
+		<!-- START Socketbug ( The following javascript is all you really need to debug your application ) -->
+		
 		<script type="text/javascript">
-			
-			var socketbug_server = 
-			{
-				/* Socket bug host ( leave out the http:// ) */
-				'host': 'localhost',
-				
-				/* Socketbug Port */
-				'port': 8080,
-				
-				/** 
-				 * Unique GUID of Application
-				 *
-				 * If you need to make a GUID ( we will check for a valid formatted one )
-				 * You can choose "SETUP: Create GUID" from the "Socketbug Command List" 
-				 * and then copy if from your Output Window
-				 */
-				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
-				
-				/* Human Readable Name of your Application */
-				'application_name': 'Socketbug Demo Application',
-				
-				/* Unique GUID of your Group */
-				'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
-				
-				/* Human Readable Name of your Group */
-				'group_name': 'Socketbug Demo Group'
+
+			var _sbs = _sbs || {
+				'callback': socketbug_callback,
+				'version': 'v0.1.0',										// Version to connect to for future backwards compatibility
+				'host': '192.168.1.100',									// Socketbug host name without http://
+				'port': 8080,												// Socketbug port
+				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C', 	// not used yet, but have plans for this
+				'application_name': 'Socketbug Demo Application', 			// not used yet, but have plans for this
+				'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A', 		// not used yet, but have plans for this
+				'group_name': 'Socketbug Demo Group' 						// not used yet, but have plans for this
 			};
 			
+			(function() {
+			    function async_socketbug_load(){
+			        var sb = document.createElement('script'); sb.type = 'text/javascript'; sb.async = true;
+					sb.src = ('https:' == document.location.protocol ? 'https://app' : 'http://app') + '.socketbug.com/sb.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sb, s);
+			    }
+			    if (window.attachEvent)
+			        window.attachEvent('onload', async_socketbug_load);
+			    else
+			        window.addEventListener('load', async_socketbug_load, false);
+			})();
+
 		</script>
 		
-		<!-- Load Socketbug Libraries -->
-		<script type="text/javascript" src="js/socketbug.js"></script>		
-		
+		<!-- END Socketbug -->
+			
 	</body>
 </html>

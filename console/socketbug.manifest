@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#Version 0.1.0000
+# Version 0.1.0
 CACHE:
 index.html
 favicon.ico
@@ -26,6 +26,11 @@ css/ui-lightness/jquery.ui.selectmenu.css
 img/apple-touch-icon.png
 img/arrow.png
 img/arrow_focus.png
+img/debug_debug.png
+img/debug_error.png
+img/debug_info.png
+img/debug_log.png
+img/debug_warn.png
 img/icon_clean.png
 img/off.png
 img/on.png
