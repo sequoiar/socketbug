@@ -1,15 +1,17 @@
-/* ========== BEGIN SOCKETBUG SERVER CODE ========== */
-
 /**
- * Socketbug Server - v0.1 - 6/16/2011
+ * Socketbug - Web Socket Remote Debugging
  *
- * Website: http://www.socketbug.com
- * Cource: http://github.com/manifestinteractive/socketbug
+ * @version v0.1.0 ( 6/20/2011 )
+ *
+ * @link Website: http://www.socketbug.com
+ * @link Twitter: http://www.twitter.com/socketbug_dev
+ * @link Source: http://github.com/manifestinteractive/socketbug
+ * @link Support & Feature Requests: http://socketbug.userecho.com
  * 
- * Copyright (c) 2011 Manifest Interactive, LLC
- * Licensed under the LGPL v3 licenses.
- * http://www.socketbug.com/license/
- */	
+ * @copyright Copyright (c) 2011 Manifest Interactive, LLC
+ *
+ * @license Licensed under the LGPL v3 licenses.
+ */
 if(typeof(socketbug) === 'undefined')
 {
 	socketbug = (function(){
@@ -97,7 +99,7 @@ if(typeof(socketbug) === 'undefined')
 							
 							/* Pass Object to Application */
 							
-							/* !!! Add Logic to Only sent to Matching Application IDs */
+							/* @todo Add Logic to ONLY send to Matching Application IDs */
 							io.clients[client.sessionId].send(data);
 							client.broadcast(data);
 							
@@ -130,11 +132,6 @@ if(typeof(socketbug) === 'undefined')
 				
 			}
 		);
-		
-		var process_appliation = function(clients, data, application, group)
-		{
-			
-		};
 		
 	})();
 }
