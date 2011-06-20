@@ -1,4 +1,4 @@
-![Socketbug Logo](http://github.socketbug.com/logo.png "Socketbug - Web Socket Remote Debuggin")
+![Socketbug Logo](http://github.socketbug.com/logo.png "Socketbug - Web Socket Remote Debugging")
 
 ![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
 
@@ -26,6 +26,8 @@ We preferred the following setup for our Linux installation:
 
 ## #2 Setup Socketbug to use Node.js
 
+Pick a place on your server where you want to install Socketbug. For this writeup, we will use /usr/local/socketbug.  You can use whatever directory you wish.
+
 	sudo mkdir /usr/local/socketbug/
 	sudo chmod 777 /usr/local/socketbug
 	cd /usr/local/socketbug
@@ -38,8 +40,8 @@ Install Node.js Package **socket.io**:
 
 	sudo npm install socket.io
 
-Install Node.js Package **base64**:
+Install Node.js Package **forever** ( to run Socketbug as a service ):
 
-	sudo npm install base64
+	sudo npm install forever -g
 	
 ## #4 Copy socketbug.js file
