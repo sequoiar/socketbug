@@ -128,11 +128,11 @@ if(typeof(socketbug) === 'undefined')
 		};
 		
 		socketbug.send(setup);
-		
+
 		/* Do Callback if one set */
-		if(_sbs.callback && typeof(_sbs.callback) === "function")
+		if(_sbs.connect_callback && typeof(_sbs.connect_callback) === "function")
 		{
-			_sbs.callback();
+			_sbs.connect_callback();
 		}
 	});
 
@@ -231,6 +231,12 @@ if(typeof(socketbug) === 'undefined')
 				
 				break;
 		}
+		
+		/* Do Callback if one set */
+		if(_sbs.message_callback && typeof(_sbs.message_callback) === "function")
+		{
+			_sbs.message_callback(data);
+		}
 	});
 
 	/* Capture Close Event */
@@ -245,6 +251,12 @@ if(typeof(socketbug) === 'undefined')
 	{
 		socketbug.log('Socketbug Disconnected', 'warn');
 		socketbug.connected = false;
+
+		/* Do Callback if one set */
+		if(_sbs.disconnect_callback && typeof(_sbs.disconnect_callback) === "function")
+		{
+			_sbs.disconnect_callback();
+		}
 	});
 
 	/* Capture Reconnect Event */

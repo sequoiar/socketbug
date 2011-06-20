@@ -14,24 +14,56 @@
  */
 function load_socketbug_js(filename, version)
 {
-	var br = document.createTextNode('\r\n');
-	var sb = document.createElement('script');
-	sb.type = 'text/javascript'; 
-	sb.async = false;
-	sb.src = ('https:' == document.location.protocol 
-		? 'https://app.socketbug.com/' 
-		: 'http://app.socketbug.com/') 
-		+ _sbs.version 
-		+ '/application/'
-		+ filename;
+	try
+	{
+		var br = document.createTextNode('\r\n');
+		var sb = document.createElement('script');
+		sb.type = 'text/javascript'; 
+		sb.async = true;
+		sb.src = ('https:' == document.location.protocol 
+			? 'https://app.socketbug.com/' 
+			: 'http://app.socketbug.com/') 
+			+ _sbs.version 
+			+ '/application/'
+			+ filename;
 	
-	var s = document.getElementsByTagName('script')[0]; 
-	s.parentNode.insertBefore(sb, s);
-	s.parentNode.insertBefore(br, s);
+		var s = document.getElementsByTagName('script')[0]; 
+		if(s.parentNode.insertBefore(sb, s) && s.parentNode.insertBefore(br, s))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	catch(err)
+	{
+		alert('Unable to load ' + filename);
+		return false;
+	}
+}
+var tries = 0;
+var max_tries = 50;
+function check_io()
+{
+	if(typeof(io) != 'undefined')
+	{
+		load_socketbug_js('socketbug.js');
+	}
+	else if(tries <= max_tries)
+	{
+		setTimeout(check_io, 100);
+		tries++;
+	}
+	else
+	{
+		alert('Unable to Detect Socket.IO');
+	}
 }
 
 /* Load Required Socketbug Javascript */
 (function(){
 	load_socketbug_js('socket.io.js');
-	load_socketbug_js('socketbug.js');
+	check_io();
 })();

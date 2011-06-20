@@ -23,35 +23,21 @@
 		
 		<!-- Test functionality to show when Socketbug is loaded ( Not Required for Socketbug ) -->
 		<script type="text/javascript">
-		var sb_loaded = false;
-		function check_sb()
+		function socketbug_connect_callback()
 		{
-			if(typeof(socketbug) != 'undefined' && !sb_loaded)
-			{
-				if(socketbug.session_id)
-				{
-					debug.log('Socketbug Loaded');
-					$('#status').html('Socketbug Connected with Session ID:&nbsp; ' + socketbug.session_id);
-				}
-				else
-				{
-					$('#status').html('<span class="error">Socketbug Failed to Connect</span>');
-				}
-				
-				sb_loaded = true;
-			}
-			else
-			{
-				setTimeout(check_sb, 500);
-				console.log('Connecting to Socketbug...');
-				$('#status').html('Connecting to Socketbug...');
-			}
+			$('#status').html('Socketbug Connection Established...');
+			console.log('Socketbug Connect Callback Triggered');
 		}
-		check_sb();
-		
-		function socketbug_callback()
+		function socketbug_disconnect_callback()
 		{
-			alert('Callback Loaded');
+			$('#status').html('<span class="error">Socketbug was Disconnected</span>');
+			console.log('Socketbug Disconnect Callback Triggered');
+		}
+		function socketbug_message_callback(data)
+		{
+			$('#status').html('Socketbug Connected with Session ID:&nbsp; ' + socketbug.session_id);
+			console.log('Socketbug Message Callback Triggered');
+			console.log(data);
 		}
 		</script>
 
@@ -88,9 +74,11 @@
 		<script type="text/javascript">
 
 			var _sbs = _sbs || {
-				'callback': socketbug_callback,
+				'connect_callback': socketbug_connect_callback,				// Custom Callback Handler for Connect Event
+				'disconnect_callback': socketbug_disconnect_callback,		// Custom Callback Handler for Disconnect Event
+				'message_callback': socketbug_message_callback,				// Custom Callback Handler for Message Event
 				'version': 'v0.1.0',										// Version to connect to for future backwards compatibility
-				'host': '192.168.1.100',									// Socketbug host name without http://
+				'host': 'localhost',										// Socketbug host name without http://
 				'port': 8080,												// Socketbug port
 				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C', 	// not used yet, but have plans for this
 				'application_name': 'Socketbug Demo Application', 			// not used yet, but have plans for this
