@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--<html manifest="socketbug.manifest">-->
+<html>
+	<head>
+		<title>Socketbug</title>
+		
+		<!-- Load Third Party Styles -->
+		<link rel="stylesheet" type="text/css" href="css/sh/shCore.css" /> 
+  		<link rel="stylesheet" type="text/css" href="css/sh/shThemeDefault.css" />
+		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
+		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery.ui.selectmenu.css" />
+		
+		<!-- Load Socketbug Styles -->
+		<link rel="stylesheet" type="text/css" href="css/socketbug_console.css" />
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		
+		<!-- Setup Mobile Device Support -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+        <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon.png" />
+		<link rel="apple-touch-startup-image" href="img/splash.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+		<link rel="apple-touch-startup-image" sizes="748x1024" href="img/splash.jpg" />
+		<link rel="apple-touch-startup-image" href="img/splash_port.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+		<link rel="apple-touch-startup-image" sizes="768x1004" href="img/splash_port.jpg" />
+
+	</head>
+	<body>
+		<!-- Setup Socketbug Console Watermark -->
+		<div id="watermark"></div>
+		
+		<!-- Header with Settings and Connection Toggle -->
+		<div id="header">
+			<div id="settings">
+				<div id="run">
+					<select name="command_list" id="command_list"> 
+						<option value="list" selected="selected">SOCKETBUG COMMAND LIST:</option> 
+						<option value="view_source">COMMAND:&nbsp; Fetch Remote Source Code</option>
+						<option value="setup_create_guid">SETUP:&nbsp; Create GUID</option>
+						<option value="setup_validate_app_guid">SETUP:&nbsp; Validate Application GUID</option>
+						<option value="setup_validate_group_guid">SETUP:&nbsp; Validate Group GUID</option>
+					</select>
+					<button type="button" id="run_command">RUN</button>
+				</div>
+				<div id="status">
+					<img src="img/spinner.gif" id="loading" />Socketbug: <input type="checkbox" id="connect" value="on" />
+				</div>
+			</div>
+			<div id="settings_tab"><a href="#" title="Toggle Settings Window" onclick="return false;">settings</a></div>
+		</div>
+		
+		<!-- Source Code Container for when it is Viewed -->
+		<div id="source_code"><button type="button" id="close_source" title="Close Source Code Window">Close Source Code Window</button></div>
+		
+		<!-- Output Window where Socketbug Info Gets Logged -->
+		<div id="output_window">
+			<div id="output_tab"><a href="#" title="Toggle Output Window" onclick="return false;">output</a></div>
+			<div id="output"><a href="#" class="clear" title="Clear Ouptut" onclick="return false;"><img src="img/icon_clean.png" /></a>
+				<ul></ul>
+			</div>
+		</div>
+		
+		<!-- Console Command Line -->
+		<div id="command_line">
+			<div><input type="text" name="command" id="command" placeholder="Type some Javascript to send to Socketbug..." title="Type to Autocomplete. Enter to Execute." /></div>
+		</div>
+		
+		<!-- Load Third Party Libraries -->
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/checkboxes.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.selectmenu.js"></script>
+		<script type="text/javascript" src="js/date.format.js"></script>
+		<script type="text/javascript" src="js/jquery.uuid.js"></script>
+		<script type="text/javascript" src="js/sh/XRegExp.js"></script>
+		<script type="text/javascript" src="js/sh/shCore.js"></script> 
+		<script type="text/javascript" src="js/sh/shBrushXml.js"></script> 
+		<script type="text/javascript" src="js/sh/shBrushJScript.js"></script> 
+		<script type="text/javascript" src="js/sh/shBrushCss.js"></script>
+		
+		<!-- Setup Socketbug -->
+		<script type="text/javascript">
+			
+			var socketbug_server = 
+			{
+				/* Socket bug host ( leave out the http:// ) */
+				'host': 'localhost',
+				
+				/* Socketbug Port */
+				'port': 8080,
+				
+				/* Socketbug Port */
+				'mode': 'console',
+				
+				/** 
+				 * Unique GUID of Application
+				 *
+				 * If you need to make a GUID ( we will check for a valid formatted one )
+				 * You can choose "SETUP: Create GUID" from the "Socketbug Command List" 
+				 * and then copy if from your Output Window
+				 */
+				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
+				
+				/* Human Readable Name of your Application */
+				'application_name': 'Socketbug Demo Application',
+				
+				/* Unique GUID of your Group */
+				'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
+				
+				/* Human Readable Name of your Group */
+				'group_name': 'Socketbug Demo Group'
+			};
+			
+		</script>
+		
+		<!-- Load Socketbug Libraries -->
+		<script type="text/javascript" src="js/socket.io.js"></script>
+		<script type="text/javascript" src="js/socketbug_console.js"></script>		
+		
+	</body>
+</html>

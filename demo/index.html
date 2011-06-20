@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--<html manifest="socketbug.manifest">-->
+<html>
+	<head>
+		<title>Socketbug</title>
+		
+		<!-- Load Socketbug Styles -->
+		<link rel="stylesheet" type="text/css" href="css/socketbug_application.css" />
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		
+		<!-- Setup Mobile Device Support -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+        <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon.png" />
+		<link rel="apple-touch-startup-image" href="img/splash.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+		<link rel="apple-touch-startup-image" sizes="748x1024" href="img/splash.jpg" />
+		<link rel="apple-touch-startup-image" href="img/splash_port.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+		<link rel="apple-touch-startup-image" sizes="768x1004" href="img/splash_port.jpg" />
+
+	</head>
+	<body>
+		<!-- Setup Socketbug Console Watermark -->
+		<div id="watermark"></div>
+		
+		<!-- Socketbug Demo Playground -->
+		<div id="playground">
+			
+			This DIV has the ID of #playground
+			
+		</div>
+				
+		<!-- Setup Socketbug -->
+		<script type="text/javascript">
+			
+			var socketbug_server = 
+			{
+				/* Socket bug host ( leave out the http:// ) */
+				'host': 'localhost',
+				
+				/* Socketbug Port */
+				'port': 8080,
+				
+				/** 
+				 * Unique GUID of Application
+				 *
+				 * If you need to make a GUID ( we will check for a valid formatted one )
+				 * You can choose "SETUP: Create GUID" from the "Socketbug Command List" 
+				 * and then copy if from your Output Window
+				 */
+				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
+				
+				/* Human Readable Name of your Application */
+				'application_name': 'Socketbug Demo Application',
+				
+				/* Unique GUID of your Group */
+				'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
+				
+				/* Human Readable Name of your Group */
+				'group_name': 'Socketbug Demo Group'
+			};
+			
+		</script>
+		
+		<!-- Load Socketbug Libraries -->
+		<script type="text/javascript" src="js/socketbug.js"></script>		
+		
+	</body>
+</html>
