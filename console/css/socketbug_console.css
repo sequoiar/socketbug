@@ -294,7 +294,6 @@ body
 }
 #output
 {
-	display: none;
 	background-color: #111;
 	height: 200px;
 	overflow: auto;

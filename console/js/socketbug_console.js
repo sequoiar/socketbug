@@ -70,19 +70,22 @@ if(typeof(socketbug) === 'undefined')
 			switch(level)
 			{
 				case 'warn':
-					jQuery('#output ul').prepend('<li class="recent"><span>[ ' + date + ' ]</span> <span class="warn">' + message + '</span></li>');
+					jQuery('#output ul').prepend('<li class="recent" style="display: none;"><span>[ ' + date + ' ]</span> <span class="warn">' + message + '</span></li>');
 					debug.warn(message);
 					break;
 					
 				case 'error':
-					jQuery('#output ul').prepend('<li class="recent"><span>[ ' + date + ' ]</span> <span class="error">' + message + '</span></li>');
+					jQuery('#output ul').prepend('<li class="recent" style="display: none;"><span>[ ' + date + ' ]</span> <span class="error">' + message + '</span></li>');
 					debug.error(message);
 					break;
 					
 				default:
-					jQuery('#output ul').prepend('<li class="recent"><span>[ ' + date + ' ]</span> ' + message + '</li>');
+					jQuery('#output ul').prepend('<li class="recent" style="display: none;"><span>[ ' + date + ' ]</span> ' + message + '</li>');
 					debug.log(message);
 			}
+			
+			/* Fade in New Log Entry */
+			jQuery('.recent').fadeIn();
 			
 		},
 		
@@ -123,7 +126,7 @@ if(typeof(socketbug) === 'undefined')
 				/* Set Timeout to Remove Class so we can repeat this later */
 				setTimeout(function(){ jQuery('#watermark').removeClass('its_alive'); }, 5100);
 				
-				socketbug.log('<span class="value">IT\'s ALIVE!!!</span>');
+				socketbug.log('<span class="value">IT\'S ALIVE!!!</span>');
 				
 				jQuery('#command').val('').blur();
 				
@@ -136,8 +139,12 @@ if(typeof(socketbug) === 'undefined')
 			
 			/* Prepare Custom JSON to Send to Socketbug Server */
 			var json = { 
-				'application_id': this.application_id, 
-				'session_id': this.session_id, 
+				'session_id': this.session_id,
+				'mode': 'console',
+				'application_id': socketbug_server.application_id,
+				'application_name': socketbug_server.application_name,
+				'group_id': socketbug_server.group_id,
+				'group_name': socketbug_server.group_name,
 				'command': 'javascript', 
 				'js': javascript 
 			};
@@ -154,8 +161,12 @@ if(typeof(socketbug) === 'undefined')
 			
 			/* Prepare Custom JSON to Send to Socketbug Server */
 			var json = { 
-				'application_id': this.application_id, 
-				'session_id': this.session_id, 
+				'session_id': this.session_id,
+				'mode': 'console',
+				'application_id': socketbug_server.application_id,
+				'application_name': socketbug_server.application_name,
+				'group_id': socketbug_server.group_id,
+				'group_name': socketbug_server.group_name, 
 				'command': 'src', 
 				'js': 'document.getElementsByTagName("html")[0].innerHTML' 
 			};
@@ -183,6 +194,17 @@ if(typeof(socketbug) === 'undefined')
 		
 		socketbug.log('Socketbug Connected');
 		socketbug.connected = true;
+		
+		var setup = {
+			'init': true,
+			'mode': 'application',
+			'application_id': socketbug_server.application_id,
+			'application_name': socketbug_server.application_name,
+			'group_id': socketbug_server.group_id,
+			'group_name': socketbug_server.group_name
+		};
+		
+		socketbug.io.send(setup);
 	});
 
 	/* Capture Connect Failed Event */
@@ -203,6 +225,9 @@ if(typeof(socketbug) === 'undefined')
 	/* Capture Message Event */
 	socketbug.io.on('message', function(data)
 	{
+		/* Check Received Data Type */
+		socketbug.log('Received Socketbug ' + typeof(data));
+		
 		/* Check the kind of data Socketbug Sent Back */
 		switch(typeof(data))
 		{
@@ -236,48 +261,46 @@ if(typeof(socketbug) === 'undefined')
 					/* Run Javascript Command */
 					case 'javascript':
 					
-						socketbug.log('Received Javascript:&nbsp; <span class="value">' + data.js + '</span>');
+						if(data.mode == 'application')
+						{
+							socketbug.log('Executed Remote Javascript:&nbsp; <span class="value">' + data.js + '</span>');
 						
-						/* I know... this is an eval() ... I am pure EVIL() */
-						eval(data.js);
-						
-						/* Clear Command */
-						jQuery('#command').val('').blur();
+							/* Clear Command */
+							jQuery('#command').val('').blur();
+						}
 					
 						break;
 					
 					/* Run View Source Command */
 					case 'src':
 						
-						socketbug.log('Received Source Code');
+						if(data.mode == 'application')
+						{
+							socketbug.log('Received Source Code');
+
+							var src = data.html_code;
 						
-						/* Yes... another eval() ... you're just going to have to get over it, or tell me a better way! */
-						eval('var src = '+data.js);
-					
-						/* Replace Characters that can cause issues on some browsers */
-						src = src.replace(/</g,'&lt;');
-						src = src.replace(/>/g,'&gt;');
+							/* Prepare Syntax Highlighting for Source Code */
+							var brush = new SyntaxHighlighter.brushes.Xml(),
+							code = src,html;
 						
-						/* Prepare Syntax Highlighting for Source Code */
-						var brush = new SyntaxHighlighter.brushes.Xml(),
-						code = src,html;
+							/* Render Syntax Highligher */
+							brush.init(
+							{ 
+								'toolbar': false,
+								'auto-links': true,
+								'smart-tabs': true,
+								'gutter': true
+							});
+							html = brush.getHtml(code);
 						
-						/* Render Syntax Highligher */
-						brush.init(
-						{ 
-							'toolbar': false,
-							'auto-links': true,
-							'smart-tabs': true,
-							'gutter': true
-						});
-						html = brush.getHtml(code);
-						
-						/* Update Interface Elements */
-						jQuery('#source_code').append('<pre></pre>');
-						jQuery('#source_code pre').html(html);
-						jQuery('#source_code').slideDown();
-						jQuery('#output').slideUp();
-						jQuery('#settings').slideUp();
+							/* Update Interface Elements */
+							jQuery('#source_code').append('<pre></pre>');
+							jQuery('#source_code pre').html(html);
+							jQuery('#source_code').slideDown();
+							jQuery('#output').slideUp();
+							jQuery('#settings').slideUp();
+						}
 						
 						break;
 				}
@@ -484,6 +507,37 @@ jQuery(document).ready(function()
 				/* Fetch Remote Application Source Code */
 				socketbug.view_source();
 				
+				break;
+				
+			case 'setup_create_guid':
+			
+				/* Reset Command List */
+				jQuery('#command_list').selectmenu("value", "list");
+				
+				socketbug.log('New GUID:&nbsp; <span class="value">'  + jQuery.GUID.new() + '</span>');
+			
+				break;
+				
+			case 'setup_validate_app_guid':
+			
+				/* Reset Command List */
+				jQuery('#command_list').selectmenu("value", "list");
+				
+				var is_valid = (jQuery.GUID.is_valid(socketbug_server.application_id)) ? 'VALID':'INVALID';
+				
+				socketbug.log('Your Application GUID format is:&nbsp; <span class="value">'  + is_valid + '</span>');
+			
+				break;
+				
+			case 'setup_validate_group_guid':
+			
+				/* Reset Command List */
+				jQuery('#command_list').selectmenu("value", "list");
+				
+				var is_valid = (jQuery.GUID.is_valid(socketbug_server.group_id)) ? 'VALID':'INVALID';
+				
+				socketbug.log('Your Group GUID format is:&nbsp; <span class="value">'  + is_valid + '</span>');
+			
 				break;
 		}
 	});

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html manifest="socketbug.manifest">
+<!--<html manifest="socketbug.manifest">-->
+<html>
 	<head>
 		<title>Socketbug</title>
 		
@@ -35,7 +36,10 @@
 				<div id="run">
 					<select name="command_list" id="command_list"> 
 						<option value="list" selected="selected">SOCKETBUG COMMAND LIST:</option> 
-						<option value="view_source">Fetch Remote Source Code</option> 
+						<option value="view_source">COMMAND:&nbsp; Fetch Remote Source Code</option>
+						<option value="setup_create_guid">SETUP:&nbsp; Create GUID</option>
+						<option value="setup_validate_app_guid">SETUP:&nbsp; Validate Application GUID</option>
+						<option value="setup_validate_group_guid">SETUP:&nbsp; Validate Group GUID</option>
 					</select>
 					<button type="button" id="run_command">RUN</button>
 				</div>
@@ -84,7 +88,28 @@
 				'host': 'localhost',
 				
 				/* Socketbug Port */
-				'port': 8080
+				'port': 8080,
+				
+				/* Socketbug Port */
+				'mode': 'console',
+				
+				/** 
+				 * Unique GUID of Application
+				 *
+				 * If you need to make a GUID ( we will check for a valid formatted one )
+				 * You can choose "SETUP: Create GUID" from the "Socketbug Command List" 
+				 * and then copy if from your Output Window
+				 */
+				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
+				
+				/* Human Readable Name of your Application */
+				'application_name': 'Socketbug Demo Application',
+				
+				/* Unique GUID of your Group */
+				'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
+				
+				/* Human Readable Name of your Group */
+				'group_name': 'Socketbug Demo Group'
 			};
 			
 		</script>

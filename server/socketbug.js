@@ -9,10 +9,13 @@
  * Copyright (c) 2011 Manifest Interactive, LLC
  * Licensed under the LGPL v3 licenses.
  * http://www.socketbug.com/license/
- */
+ */	
 if(typeof(socketbug) === 'undefined')
 {
 	socketbug = (function(){
+		
+		/* Store Clients */
+		var socketbug_clients = [];
 		
 		/* Socketbug Server Port Number */
 		var server_port = 8080;
@@ -49,10 +52,55 @@ if(typeof(socketbug) === 'undefined')
 							io.clients[client.sessionId].send('Message Received: ' + data);
 							//client.send();
 							
+							client.broadcast(socketbug_clients);
+							io.clients[client.sessionId].send(socketbug_clients);
+							
 							break;
 							
 						case 'object':
+							
+							/* Check if this is First Communication */
+							if(typeof(data.init) != 'undefined')
+							{
+								if(data.init)
+								{
+									/* Check if Client is already List */
+									var client_exists = false;
+									
+									for(sb_client in socketbug_clients)
+									{
+										if(sb_client['session_id'] == client.sessionId)
+										{
+											client_exists = true;
+											return true;
+										}
+									}
+									
+									if(client_exists === false)
+									{
+										var date = new Date();
+									
+										var new_client = {
+											'mode': data.mode,
+											'session_id': client.sessionId,
+											'application_id': data.application_id,
+											'application_name': data.application_name,
+											'group_id': data.group_id,
+											'group_name': data.group_name,
+											'connected': date
+										};
+									
+										socketbug_clients.push(new_client);	
+									}								
+								}
+							}
+							
+							/* Pass Object to Application */
+							
+							/* !!! Add Logic to Only sent to Matching Application IDs */
 							io.clients[client.sessionId].send(data);
+							client.broadcast(data);
+							
 							break;
 					}
 				});
@@ -60,6 +108,17 @@ if(typeof(socketbug) === 'undefined')
 				// Capture Client disconnect Event
 				client.on('disconnect', function()
 				{
+					/* Remove Client from List */
+					var client_count = 0;
+					for(sb_client in socketbug_clients)
+					{
+						if(sb_client['session_id'] == client.sessionId)
+						{
+							socketbug_clients.splice(client_count, 1);
+							return true;
+						}
+						client_count++;
+					}
 					sys.debug('Client ' + client.sessionId + ' Socketbug Disconnected');
 				});
 				
@@ -71,6 +130,11 @@ if(typeof(socketbug) === 'undefined')
 				
 			}
 		);
+		
+		var process_appliation = function(clients, data, application, group)
+		{
+			
+		};
 		
 	})();
 }
