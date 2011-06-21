@@ -1,7 +1,7 @@
 /**
  * Socketbug - Web Socket Remote Debugging
  *
- * @version v0.1.0 ( 6/20/2011 )
+ * @version v0.1.0a ( 6/21/2011 )
  *
  * @link Website: http://www.socketbug.com
  * @link Twitter: http://www.twitter.com/socketbug_dev

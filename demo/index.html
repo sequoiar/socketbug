@@ -39,6 +39,10 @@
 			console.log('Socketbug Message Callback Triggered');
 			console.log(data);
 		}
+		function error_test()
+		{
+			var fake = this_will_break;
+		}
 		</script>
 
 	</head>
@@ -65,6 +69,9 @@
 			<button onclick="debug.error('User Clicked Error Text Button');">Error Text</button>
 			<button onclick="debug.error({ 'Message': 'User Clicked Error Object Button' });">Error Object</button>
 			<br />
+			<button onclick="fake_function('Trying to call Fake Function');">JS Error 1</button>
+			<button onclick="error_test();">JS Error 2</button>
+			<br />
 			
 			<div id="status">Connecting to Socketbug...</div>
 		</div>
@@ -77,7 +84,7 @@
 				'connect_callback': socketbug_connect_callback,				// Custom Callback Handler for Connect Event
 				'disconnect_callback': socketbug_disconnect_callback,		// Custom Callback Handler for Disconnect Event
 				'message_callback': socketbug_message_callback,				// Custom Callback Handler for Message Event
-				'version': 'v0.1.0',										// Version to connect to for future backwards compatibility
+				'version': '0.1.0a',										// Version to connect to for future backwards compatibility
 				'host': 'localhost',										// Socketbug host name without http://
 				'port': 8080,												// Socketbug port
 				'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C', 	// not used yet, but have plans for this
@@ -89,7 +96,7 @@
 			(function() {
 			    function async_socketbug_load(){
 			        var sb = document.createElement('script'); sb.type = 'text/javascript'; sb.async = true;
-					sb.src = ('https:' == document.location.protocol ? 'https://cdn' : 'http://cdn') + '.socketbug.com/sb.min.js';
+					sb.src = ('https:' == document.location.protocol ? 'https://cdn' : 'http://cdn') + '.socketbug.com/sb.js';
 					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sb, s);
 			    }
 			    if (window.attachEvent)
