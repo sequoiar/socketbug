@@ -39,13 +39,13 @@ button
 	padding: 5px;
 	cursor: pointer;
 }
-button:hover
+button:active
 {
 	border: 1px solid #5f7799;
 	background-color: #132743;
 	color: #DDD;
 }
-button:active
+button:hover
 {
 	border: 1px solid #e33a26;
 	background-color: #9c282d;
@@ -85,5 +85,20 @@ button:active
 .error
 {
 	color: #ff7b81;
+}
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(360deg);
+  }
+  to { 
+    -webkit-transform: rotate(0deg);
+  }
+}
+.its_alive
+{	
+	-webkit-animation-name: rotate; 
+    -webkit-animation-duration: 5s; 
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
 }
 /* @end */
