@@ -44,4 +44,4 @@ Install Node.js Package **forever** ( to run Socketbug as a service ):
 
 	sudo npm install forever -g
 	
-## #4 Copy socketbug.js file
+## #4 More Instructions Coming Soon...

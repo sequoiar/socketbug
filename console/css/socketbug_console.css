@@ -510,7 +510,7 @@ label.iPhoneCheckLabelOff span
 .its_alive
 {	
 	-webkit-animation-name: rotate; 
-    -webkit-animation-duration: 5s; 
+    -webkit-animation-duration: 3s; 
     -webkit-animation-iteration-count: 1;
     -webkit-animation-timing-function: linear;
 	background: url('../img/watermark_alt.png') center center no-repeat !important;

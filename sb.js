@@ -21,8 +21,8 @@ function load_socketbug_js(filename, version)
 		sb.type = 'text/javascript'; 
 		sb.async = true;
 		sb.src = ('https:' == document.location.protocol 
-			? 'https://app.socketbug.com/' 
-			: 'http://app.socketbug.com/') 
+			? 'https://cdn.socketbug.com/' 
+			: 'http://cdn.socketbug.com/') 
 			+ _sbs.version 
 			+ '/application/'
 			+ filename;

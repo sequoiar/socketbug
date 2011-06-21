@@ -89,7 +89,7 @@
 			(function() {
 			    function async_socketbug_load(){
 			        var sb = document.createElement('script'); sb.type = 'text/javascript'; sb.async = true;
-					sb.src = ('https:' == document.location.protocol ? 'https://app' : 'http://app') + '.socketbug.com/sb.js';
+					sb.src = ('https:' == document.location.protocol ? 'https://cdn' : 'http://cdn') + '.socketbug.com/sb.min.js';
 					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sb, s);
 			    }
 			    if (window.attachEvent)
