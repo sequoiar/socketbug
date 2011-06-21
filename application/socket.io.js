@@ -1257,7 +1257,7 @@ if (typeof window != 'undefined'){
    */
   JSONPPolling = io.Transport['jsonp-polling'] = function(){
     io.Transport.XHR.apply(this, arguments);
-    this.insertAt = document.getElementsByTagName('script')[0];
+    this.insertAt = document.getElementsByTagName('head')[0];
     this.index = io.JSONP.length;
     io.JSONP.push(this);
   };
@@ -1306,7 +1306,7 @@ if (typeof window != 'undefined'){
       form.action = this.prepareUrl() + '/' + (+new Date) + '/' + this.index;
       area.name = 'data';
       form.appendChild(area);
-      this.insertAt.parentNode.insertBefore(form, this.insertAt);
+      this.insertAt.insertBefore(form, null);
       document.body.appendChild(form);
   
       this.form = form;
@@ -1374,7 +1374,7 @@ if (typeof window != 'undefined'){
     script.onerror = function(){
       self.onDisconnect();
     };
-    this.insertAt.parentNode.insertBefore(script, this.insertAt);
+    this.insertAt.insertBefore(script, null);
     this.script = script;
   };
   
@@ -1411,6 +1411,7 @@ if (typeof window != 'undefined'){
     return true;
   };
 })();
+
 /**
  * socket.io-node-client
  * Copyright(c) 2011 LearnBoost <dev@learnboost.com>
@@ -2226,4 +2227,3 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   }
   
 })();
-

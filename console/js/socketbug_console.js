@@ -19,14 +19,18 @@ if(typeof(debug) === 'undefined')
 /* ========== BEGIN SOCKETBUG CONSOLE CODE ========== */
 
 /**
- * Socketbug Server - v0.1 - 6/16/2011
+ * Socketbug - Web Socket Remote Debugging
  *
- * Website: http://www.socketbug.com
- * Cource: http://github.com/manifestinteractive/socketbug
+ * @version v0.1.0 ( 6/20/2011 )
+ *
+ * @link Website: http://www.socketbug.com
+ * @link Twitter: http://www.twitter.com/socketbug_dev
+ * @link Source: http://github.com/manifestinteractive/socketbug
+ * @link Support & Feature Requests: http://socketbug.userecho.com
  * 
- * Copyright (c) 2011 Manifest Interactive, LLC
- * Licensed under the LGPL v3 licenses.
- * http://www.socketbug.com/license/
+ * @copyright Copyright (c) 2011 Manifest Interactive, LLC
+ *
+ * @license Licensed under the LGPL v3 licenses.
  */
 if(typeof(socketbug) === 'undefined')
 {
@@ -36,24 +40,12 @@ if(typeof(socketbug) === 'undefined')
 		connected: false,
 		
 		/* Store Socketbug Console Session ID */
-		application_id: null,
-		
-		/* Store Socketbug Console Session ID */
 		session_id: null,
 		
-		/**
-		 * Setup Socket.io to Listen to Server
-		 * 
-		 * This code assumes you have already setup the 
-		 * socketbug_server variable on the index.html page
-		 * above where you are loading this Javascript file
-		 * 
-		 * var socketbug_server = 
-		 * {
-		 *		'host': 'localhost',
-		 *		'port': 8080
-		 * }; 
-		 */
+		/* Debug Level */
+		debug_level: socketbug_server.debug_level,
+		
+		/* Setup Socket.io to Listen to Server */
 		io: new io.Socket(socketbug_server.host, { port: socketbug_server.port, rememberTransport: false }),
 		
 		/* Setup Ouput Log for Console */
@@ -71,17 +63,14 @@ if(typeof(socketbug) === 'undefined')
 			{
 				case 'warn':
 					jQuery('#output ul').prepend('<li class="recent" style="display: none;"><span>[ ' + date + ' ]</span> <span class="warn">' + message + '</span></li>');
-					debug.warn(message);
 					break;
 					
 				case 'error':
 					jQuery('#output ul').prepend('<li class="recent" style="display: none;"><span>[ ' + date + ' ]</span> <span class="error">' + message + '</span></li>');
-					debug.error(message);
 					break;
 					
 				default:
 					jQuery('#output ul').prepend('<li class="recent" style="display: none;"><span>[ ' + date + ' ]</span> ' + message + '</li>');
-					debug.log(message);
 			}
 			
 			/* Fade in New Log Entry */
@@ -204,7 +193,7 @@ if(typeof(socketbug) === 'undefined')
 			'group_name': socketbug_server.group_name
 		};
 		
-		socketbug.io.send(setup);
+		socketbug.send(setup);
 	});
 
 	/* Capture Connect Failed Event */
@@ -225,9 +214,6 @@ if(typeof(socketbug) === 'undefined')
 	/* Capture Message Event */
 	socketbug.io.on('message', function(data)
 	{
-		/* Check Received Data Type */
-		socketbug.log('Received Socketbug ' + typeof(data));
-		
 		/* Check the kind of data Socketbug Sent Back */
 		switch(typeof(data))
 		{
@@ -241,23 +227,112 @@ if(typeof(socketbug) === 'undefined')
 					socketbug.log('Socketbug Session ID:&nbsp; <span class="value">' + sid[1] + '</span>');
 					socketbug.session_id = sid[1];
 				}
-				/* Log all other String based Messages */
-				else
-				{
-					socketbug.log(data);
-				}
 		
 				break;
 			
 			/* This Message is an Object */
 			case 'object':
 				
-				/* Log the Object to Browser for Debugging */
-				debug.log(data);
-				
 				/* Check what Command Socketbug Sent */
 				switch(data.command)
 				{
+					/* Show Remote Debug Info */
+					case 'debug':
+					
+						if(data.mode == 'application')
+						{
+							/* Check the Debug Level */
+							switch(data.debug_level)
+							{
+								case 'log':
+									if(socketbug.debug_level == 5)
+									{										
+										/* Show Message in Console Ouput Window */
+										if(typeof(data.debug_message[0]) == 'string')
+										{
+											socketbug.log('<img src="./img/debug_log.png">Remote LOG:&nbsp; <span class="log">' + data.debug_message[0] + '</span>');
+										}
+										else
+										{
+											socketbug.log('<img src="./img/debug_log.png">Remote LOG:&nbsp; <span class="log">Remote Data Sent to Browser Console ( could not be displayed here )</span>');
+										}
+										
+										debug.log(data.debug_message[0]);
+									}
+									break;
+			
+								case 'debug':
+									if(socketbug.debug_level >= 4)
+									{
+										/* Show Message in Console Ouput Window */
+										if(typeof(data.debug_message[0]) == 'string')
+										{
+											socketbug.log('<img src="./img/debug_debug.png">Remote DEBUG:&nbsp; <span class="debug">' + data.debug_message[0] + '</span>');
+										}
+										else
+										{
+											socketbug.log('<img src="./img/debug_debug.png">Remote DEBUG:&nbsp; <span class="debug">Remote Data Sent to Browser Console ( could not be displayed here )</span>');
+										}
+										
+										debug.debug(data.debug_message[0]);
+									}
+									break;
+			
+								case 'info':
+									if(socketbug.debug_level >= 3)
+									{
+										/* Show Message in Console Ouput Window */
+										if(typeof(data.debug_message[0]) == 'string')
+										{
+											socketbug.log('<img src="./img/debug_info.png">Remote INFO:&nbsp; <span class="info">' + data.debug_message[0] + '</span>');
+										}
+										else
+										{
+											socketbug.log('<img src="./img/debug_info.png">Remote INFO:&nbsp; <span class="info">Remote Data Sent to Browser Console ( could not be displayed here )</span>');
+										}
+										
+										debug.info(data.debug_message[0]);
+									}
+									break;
+			
+								case 'warn':
+									if(socketbug.debug_level >= 2)
+									{
+										/* Show Message in Console Ouput Window */
+										if(typeof(data.debug_message[0]) == 'string')
+										{
+											socketbug.log('<img src="./img/debug_warn.png">Remote WARN:&nbsp; <span class="warn">' + data.debug_message[0] + '</span>');
+										}
+										else
+										{
+											socketbug.log('<img src="./img/debug_warn.png">Remote WARN:&nbsp; <span class="warn">Remote Data Sent to Browser Console ( could not be displayed here )</span>');
+										}
+										
+										debug.warn(data.debug_message[0]);
+									}
+									break;
+			
+								case 'error':
+									if(socketbug.debug_level >= 1)
+									{
+										/* Show Message in Console Ouput Window */
+										if(typeof(data.debug_message[0]) == 'string')
+										{
+											socketbug.log('<img src="./img/debug_error.png">Remote ERROR:&nbsp; <span class="error">' + data.debug_message[0] + '</span>');
+										}
+										else
+										{
+											socketbug.log('<img src="./img/debug_error.png">Remote ERROR:&nbsp; <span class="error">Remote Data Sent to Browser Console ( could not be displayed here )</span>');
+										}
+										
+										debug.error(data.debug_message[0]);
+									}
+									break;
+							}
+						}
+					
+						break;
+					
 					/* Run Javascript Command */
 					case 'javascript':
 					
@@ -351,7 +426,10 @@ if(typeof(socketbug) === 'undefined')
 	});
 	
 	/* Auto Connect to Socketbug when Page Loads */
-	socketbug.io.connect();
+	(function(){
+		debug.setLevel(socketbug.debug_level);
+		socketbug.connect();
+	})();
 }
 
 /* ========== BEGIN CONSOLE WEB CODE ========== */

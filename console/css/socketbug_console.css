@@ -1,3 +1,18 @@
+/**
+ * Socketbug - Web Socket Remote Debugging
+ *
+ * @version v0.1.0 ( 6/20/2011 )
+ *
+ * @link Website: http://www.socketbug.com
+ * @link Twitter: http://www.twitter.com/socketbug_dev
+ * @link Source: http://github.com/manifestinteractive/socketbug
+ * @link Support & Feature Requests: http://socketbug.userecho.com
+ * 
+ * @copyright Copyright (c) 2011 Manifest Interactive, LLC
+ *
+ * @license Licensed under the LGPL v3 licenses.
+ */
+
 /* @group Main Wrapper */
 html, body
 {
@@ -321,6 +336,12 @@ body
 	margin: 0px;
 	padding: 0px;
 }
+#output li img
+{
+	vertical-align: middle;
+	padding-right: 10px;
+	margin-top: -2px;
+}
 #output li
 {
 	list-style: none;
@@ -345,6 +366,18 @@ body
 #output li span.value
 {
 	color: #6597ed;
+}
+#output li span.log
+{
+	color: #fff;
+}
+#output li span.info
+{
+	color: #6597ed;
+}
+#output li span.debug
+{
+	color: #4bcd6c;
 }
 #output li span.warn
 {
@@ -477,7 +510,7 @@ label.iPhoneCheckLabelOff span
 .its_alive
 {	
 	-webkit-animation-name: rotate; 
-    -webkit-animation-duration: 5s; 
+    -webkit-animation-duration: 3s; 
     -webkit-animation-iteration-count: 1;
     -webkit-animation-timing-function: linear;
 	background: url('../img/watermark_alt.png') center center no-repeat !important;
