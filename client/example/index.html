@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Socketbug</title>
+		
+		<!-- Load Socketbug Styles ( Not Required for Socketbug ) -->
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		
+		<!-- Setup Mobile Device Support ( Not Required for Socketbug ) -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+        <link rel="apple-touch-icon-precomposed" href="img/icon.png" />
+		<link rel="apple-touch-startup-image" href="img/splash.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+		<link rel="apple-touch-startup-image" sizes="748x1024" href="img/splash.jpg" />
+		<link rel="apple-touch-startup-image" href="img/splash_port.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+		<link rel="apple-touch-startup-image" sizes="768x1004" href="img/splash_port.jpg" />
+		
+		<!-- Load jQuery just for playing around in Demo ( Not Required for Socketbug ) -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+		
+		<!-- Test functionality to show when Socketbug is loaded ( Not Required for Socketbug ) -->
+		<script type="text/javascript">
+		function socketbug_connect_callback(session_id)
+		{
+			$('#status').html('Socketbug Connected with Session ID:&nbsp; ' + session_id);
+		}
+		function socketbug_disconnect_callback()
+		{
+			$('#status').html('<span class="error">Socketbug was Disconnected</span>');
+		}
+		function socketbug_message_callback(data)
+		{
+			$('#status').html('Socketbug Connected with Session ID:&nbsp; ' + socketbug.session_id);
+		}
+		function error_test()
+		{
+			var fake = this_will_break;
+		}
+		</script>
+
+	</head>
+	<body>
+		<div id="status">Connecting to Socketbug...</div>
+		
+		<!-- Setup Socketbug Console Watermark ( Not Required for Socketbug ) -->
+		<div id="watermark"></div>
+		
+		<!-- Socketbug Demo Playground ( Not Required for Socketbug ) -->
+		<div id="playground">
+			<h1>Socketbug #playground</h1>
+
+			<button onclick="debug.debug('User Clicked Debug Text Button');">Debug Text</button>
+			<button onclick="debug.debug({ 'Message': 'User Clicked Debug Object Button' });">Debug Object</button>
+			<br />
+			<button onclick="debug.log('User Clicked Log Text Button');">Log Text</button>
+			<button onclick="debug.log({ 'Message': 'User Clicked Log Object Button' });">Log Object</button>
+			<br />
+			<button onclick="debug.info('User Clicked Info Text Button');">Info Text</button>
+			<button onclick="debug.info({ 'Message': 'User Clicked Info Object Button' });">Info Object</button>
+			<br />
+			<button onclick="debug.warn('User Clicked Warn Text Button');">Warn Text</button>
+			<button onclick="debug.warn({ 'Message': 'User Clicked Warn Object Button' });">Warn Object</button>
+			<br />
+			<button onclick="debug.error('User Clicked Error Text Button');">Error Text</button>
+			<button onclick="debug.error({ 'Message': 'User Clicked Error Object Button' });">Error Object</button>
+			<br />
+			<button onclick="fake_function('Trying to call Fake Function');">JS Error 1</button>
+			<button onclick="error_test();">JS Error 2</button>
+			<br />
+		</div>
+		
+		<!-- START Socketbug ( The following javascript is all you really need to debug your application ) -->
+		
+		<script type="text/javascript">
+		var _sbs = _sbs || {
+	
+			/* Socketbug Server */
+			'version': '0.2.0',
+			'host': 'http://192.168.1.100',
+			'port': 8080,
+	
+			/* Socketbug Account */
+			'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
+			'group_name': 'Socketbug Demo Group',
+	
+			'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
+			'application_name': 'Socketbug Demo Application',
+			
+			/** 
+			 * Debug Level
+			 * 
+			 * 5 = log, debug, info, warn, & error
+			 * 4 = debug, info, warn, & error
+			 * 3 = info, warn, & error
+			 * 2 = warn, & error
+			 * 1 = error
+			 * 0 = disable all debug messages
+			 */
+			'debug_level': 4,
+			
+			/* Load Custom Helpers */
+			'helpers': [],
+			
+			/* Load Custom Libraries */
+			'libraries': [],
+	
+			/* Load Custom Plugins */
+			'plugins': ['plugins/sample'],
+			
+			'connect_callback': socketbug_connect_callback,				// Custom Callback Handler for Connect Event
+			'disconnect_callback': socketbug_disconnect_callback,		// Custom Callback Handler for Disconnect Event
+			'message_callback': socketbug_message_callback				// Custom Callback Handler for Message Event
+				
+		};
+		</script>
+		<script type="text/javascript" data-main="../application/lib/init" src="../application/sb.js" async></script>
+		
+		<!-- END Socketbug -->
+			
+	</body>
+</html>
