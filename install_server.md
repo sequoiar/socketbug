@@ -16,7 +16,7 @@
 
 #Socketbug Installation Video
 
-<iframe src="http://player.vimeo.com/video/25702064?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe><p><a href="http://vimeo.com/25702064">Socketbug Server Installation</a> from <a href="http://vimeo.com/user7532036">Socketbug Dev</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+<iframe src="http://player.vimeo.com/video/25702064?title=0&amp;byline=0&amp;portrait=0" width="700" height="394" frameborder="0"></iframe><p>Video Tutorial on how to do a Socketbug Server Installation</p>
 
 #Installing Socketbug - The Server
 
