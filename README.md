@@ -1,34 +1,34 @@
-![Socketbug Logo](http://github.socketbug.com/logo.png "Socketbug - Remote Debugging using Socket.IO")
-
-![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
+**MENU:**&nbsp;&nbsp;&nbsp;[HOME](https://github.com/manifestinteractive/socketbug/wiki)  &nbsp;&middot;&nbsp;  [SERVER](https://github.com/manifestinteractive/socketbug/wiki/Install-Server)  &nbsp;&middot;&nbsp;  [APPLICATION](https://github.com/manifestinteractive/socketbug/wiki/Install-Application)  &nbsp;&middot;&nbsp;  [CONSOLE](https://github.com/manifestinteractive/socketbug/wiki/Install-Console)
 
 ---
 
-**![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)**
+![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
 
-**![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")**
+---
 
-**![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)**
+![Info Graphic](http://github.socketbug.com/sb_info.png)
 
-#Socketbug Introduction
+![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
 
-##Socketbug Requirements
+#Socketbug Requirements
 
- * **Node.js** ( v0.4+ )
+ * [**Node.js** ( v0.4+ )](http://nodejs.org/ "Check out Node.js")
 
- * **Socket.IO** ( v0.7+ )
+ * [**Socket.IO** ( v0.7+ )](http://socket.io/ "Check out Node.js")
 
- * **Knowledge on how to use git**
+ * **Knowledge on how to use git** ( [Linux](http://help.github.com/mac-set-up-git/), [Mac OSX](http://help.github.com/linux-set-up-git), or  [Windows](http://help.github.com/win-set-up-git) )
 
  * **Knowledge on how to use a Terminal Window**
 
-##Socketbug - What is it?
+But not to worry, our Installation Instructions will get you setup with the required libraries.  And our video should help most through any terminal issues ;)
+
+#Socketbug - What is it?
 
 The technology behind Mobile Web Applications has been growing at a tremendous rate.  Mobile Application Developers, while able to produce amazing applications, are limited by the native browsers own limited functionality. Basic features available on desktop browsers are completely absent from mobile browsers. The ability to view source code, debug javascript, or even execute a javascript command from a console are all tools developers have come to expect while developing websites.  So why are these features lacking for mobile web application developers?
 
 This is where Socketbug fills the gap! Socketbug is a Remote Debugging Utility built using [Socket.IO](http://socket.io "Socket.IO"). This means you can now use modern browsers ( both mobile and desktop ) to work together to allow you to remotely debug you mobile web applications.
 
-##Debugging your Mobile Applications with Socketbug
+#Debugging your Mobile Applications with Socketbug
 
 Socketbug is built on top of [Node.js](http://nodejs.org/ "Check out Node.js") using [Socket.IO](http://socket.io/ "Check out Node.js") (currently v0.7) as the main backend for communication. Socket.IO automatically determines what communication transport to use and enables your mobile application to send/receive messages from other connected devices.
 

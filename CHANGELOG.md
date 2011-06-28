@@ -4,11 +4,7 @@
 
 ---
 
-**![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)**
-
-**![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")**
-
-**![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)**
+![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
 
 # Change Log
   
