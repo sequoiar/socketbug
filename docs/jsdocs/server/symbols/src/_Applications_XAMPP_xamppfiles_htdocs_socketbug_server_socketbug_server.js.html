@@ -1,0 +1,657 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * Socketbug - Web Socket Remote Debugging
+<span class='line'>  3</span>  * 
+<span class='line'>  4</span>  * Copyright (c) 2011 Manifest Interactive, LLC
+<span class='line'>  5</span>  *
+<span class='line'>  6</span>  * Licensed under the LGPL v3 licenses.
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * @version v0.2.0 ( 6/25/2011 )
+<span class='line'>  9</span>  *
+<span class='line'> 10</span>  * @author &lt;a href="http://www.socketbug.com">Website&lt;/a>
+<span class='line'> 11</span>  * @author &lt;a href="http://www.vimeo.com/user7532036/videos">Video Tutorials ( HD )&lt;/a>
+<span class='line'> 12</span>  * @author &lt;a href="http://www.twitter.com/socketbug_dev">Twitter&lt;/a>
+<span class='line'> 13</span>  * @author &lt;a href="http://github.com/manifestinteractive/socketbug">Source Code&lt;/a>
+<span class='line'> 14</span>  * @author &lt;a href="http://socketbug.userecho.com">Support & Feature Requests&lt;/a>
+<span class='line'> 15</span>  *
+<span class='line'> 16</span>  * @namespace Socketbug Server 
+<span class='line'> 17</span>  */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="NAME">Socketbug</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 19</span> 
+<span class='line'> 20</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'> 21</span> 	 * Socketbug Configuration
+<span class='line'> 22</span> 	 * 
+<span class='line'> 23</span> 	 * @type Object
+<span class='line'> 24</span> 	 * 	 
+<span class='line'> 25</span> 	 * @example &lt;b>_socketbug._config._server_port&lt;/b> ( Number ): &lt;b>8080&lt;/b>
+<span class='line'> 26</span> 	 * 
+<span class='line'> 27</span> 	 * This is your Socketbugs Server Port Number Where Socket.IO is Running
+<span class='line'> 28</span> 	 * 
+<span class='line'> 29</span> 	 * @example &lt;b>_socketbug._config._authorized_only._groups&lt;/b> ( Boolean ): &lt;b>true&lt;/b>
+<span class='line'> 30</span> 	 * 
+<span class='line'> 31</span> 	 * Should Group Authentication Be Required? If this is set to true 
+<span class='line'> 32</span> 	 * then all connections will have their Group ID authenticated on 
+<span class='line'> 33</span> 	 * whatever server you specify below
+<span class='line'> 34</span> 	 * 
+<span class='line'> 35</span> 	 * @example &lt;b>_socketbug._config._authorized_only._applications&lt;/b> ( Boolean ): &lt;b>true&lt;/b>
+<span class='line'> 36</span> 	 * 
+<span class='line'> 37</span> 	 * Should Application Authentication Be Required? If this is set to 
+<span class='line'> 38</span> 	 * true then all connections will have their Application ID 
+<span class='line'> 39</span> 	 * authenticated on whatever server you specify below
+<span class='line'> 40</span> 	 * 
+<span class='line'> 41</span> 	 * @example &lt;b>_socketbug._config._authorize._host&lt;/b> ( String ): &lt;b>www.mywebsite.com&lt;/b>
+<span class='line'> 42</span> 	 * 
+<span class='line'> 43</span> 	 * Host URL ( NOTE: do not add http:// or a trailing / ) to 
+<span class='line'> 44</span> 	 * Authentication  Script. This can be any server.  It does not 
+<span class='line'> 45</span> 	 * have to be on the same  server that Socketbug is installed on.
+<span class='line'> 46</span> 	 * 
+<span class='line'> 47</span> 	 * @example &lt;b>_socketbug._config._authorize._port&lt;/b> ( Number ): &lt;b>80&lt;/b>
+<span class='line'> 48</span> 	 * 
+<span class='line'> 49</span> 	 * Port Number for your Authentication Script
+<span class='line'> 50</span> 	 * 
+<span class='line'> 51</span> 	 * @example &lt;b>_socketbug._config._authorize._path&lt;/b> ( String ): &lt;b>/path/to/my/auth.script&lt;/b>
+<span class='line'> 52</span> 	 * 
+<span class='line'> 53</span> 	 * Path from root of Authentication Script. Basically, this 
+<span class='line'> 54</span> 	 * gets appended to _socketbug._config._authorize._host to 
+<span class='line'> 55</span> 	 * make a complete URL. ( NOTE: This should start with a / )
+<span class='line'> 56</span> 	 * 
+<span class='line'> 57</span> 	 * @example &lt;b>_socketbug._config._encryption_salt&lt;/b> ( String ): &lt;b>Go0dp4$sW0rd&lt;/b>
+<span class='line'> 58</span> 	 * 
+<span class='line'> 59</span> 	 * SALT you would like to use for MD5 Hashing.  This is the SAME SALT 
+<span class='line'> 60</span> 	 * you will use throughout your Socketbug Communications.
+<span class='line'> 61</span> 	 * 
+<span class='line'> 62</span> 	 * @example &lt;b>_socketbug._groups&lt;/b> ( Object )
+<span class='line'> 63</span> 	 * 
+<span class='line'> 64</span> 	 * Object to Store Socketbug Groups.  You will not need to 
+<span class='line'> 65</span> 	 * mess with this, it's just for storing connection 
+<span class='line'> 66</span> 	 * info on Socketbug.
+<span class='line'> 67</span> 	 * 
+<span class='line'> 68</span> 	 * @example &lt;b>_socketbug._applications&lt;/b> ( Object )
+<span class='line'> 69</span> 	 * 
+<span class='line'> 70</span> 	 * Object to Store Socketbug Applications.  You will not 
+<span class='line'> 71</span> 	 * need to mess with this, it's just for storing connection 
+<span class='line'> 72</span> 	 * info on Socketbug.
+<span class='line'> 73</span> 	 * 
+<span class='line'> 74</span> 	 * @example &lt;b>_socketbug._clients&lt;/b> ( Object )
+<span class='line'> 75</span> 	 * 
+<span class='line'> 76</span> 	 * Object to Store Socketbug Clients.  You will not need 
+<span class='line'> 77</span> 	 * to mess with this, it's just for storing connection 
+<span class='line'> 78</span> 	 * info on Socketbug.
+<span class='line'> 79</span> 	 */</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_socketbug</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'> 81</span> 	</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">		</span><span class="STRN">'_config'</span><span class="PUNC">:</span><span class="WHIT"> 
+<span class='line'> 83</span> 		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">			</span><span class="STRN">'_server_port'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">8080</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">			</span><span class="STRN">'_authorized_only'</span><span class="PUNC">:</span><span class="WHIT"> 
+<span class='line'> 86</span> 			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">				</span><span class="STRN">'_groups'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">				</span><span class="STRN">'_applications'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">			</span><span class="STRN">'_authorize'</span><span class="PUNC">:</span><span class="WHIT"> 
+<span class='line'> 91</span> 			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">				</span><span class="STRN">'_host'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'auth.socketbug.com'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">				</span><span class="STRN">'_port'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">80</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">				</span><span class="STRN">'_path'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'/validate.php'</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">			</span><span class="STRN">'_encryption_salt'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Ch4ng3^M3'</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">		</span><span class="STRN">'_groups'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">		</span><span class="STRN">'_applications'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">		</span><span class="STRN">'_clients'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> 
+<span class='line'>103</span> </span><span class="WHIT">	</span><span class="COMM">/* ================================================== */</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">	</span><span class="COMM">/*   Should Not Need to Change Anything Below Here    */</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">	</span><span class="COMM">/* ================================================== */</span><span class="WHIT">
+<span class='line'>106</span> 
+<span class='line'>107</span> </span><span class="WHIT">	</span><span class="COMM">/** Basic Functionality to Manage GUID's */</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GUID</span><span class="PUNC">=</span><span class="PUNC">{</span><span class="NAME">is_valid</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">==</span><span class="STRN">'undefined'</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">value.length</span><span class="PUNC">!==</span><span class="NUMB">36</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="NAME">rGx</span><span class="PUNC">=</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="STRN">"\\b(?:[A-F0-9]{8})(?:-[A-F0-9]{4}){3}-(?:[A-F0-9]{12})\\b"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">rGx.exec</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="NAME">create</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">arguments.length</span><span class="PUNC">==</span><span class="NUMB">1</span><span class="PUNC">&&</span><span class="NAME">this.is_valid</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="NAME">value</span><span class="PUNC">=</span><span class="NAME">arguments</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">res</span><span class="PUNC">=</span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hv</span><span class="PUNC">;</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rgx</span><span class="PUNC">=</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="STRN">"[2345]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NUMB">8</span><span class="PUNC">;</span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="NAME">hv</span><span class="PUNC">=</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">+</span><span class="NAME">Math.random</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">*</span><span class="NUMB">0x10000</span><span class="PUNC">)</span><span class="PUNC">|</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">substring</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">rgx.exec</span><span class="PUNC">(</span><span class="NAME">i.toString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">!=</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">==</span><span class="NUMB">3</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="NAME">hv</span><span class="PUNC">=</span><span class="STRN">"6"</span><span class="PUNC">+</span><span class="NAME">hv.substr</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="NAME">res.push</span><span class="PUNC">(</span><span class="STRN">"-"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="NAME">res.push</span><span class="PUNC">(</span><span class="NAME">hv.toUpperCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="NAME">value</span><span class="PUNC">=</span><span class="NAME">res.join</span><span class="PUNC">(</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> 
+<span class='line'>110</span> </span><span class="WHIT">	</span><span class="COMM">/** Node.js Requirements */</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">http</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'http'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">	    </span><span class="NAME">crypto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'crypto'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span> 
+<span class='line'>114</span> </span><span class="WHIT">	</span><span class="COMM">/** Setup Socket.io to Listen to Server */</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">io</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'socket.io'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">listen</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._server_port</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> 
+<span class='line'>117</span> </span><span class="WHIT">	</span><span class="COMM">/** Configure Socket.IO */</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">	</span><span class="NAME">io.configure</span><span class="PUNC">(</span><span class="STRN">'production'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">		</span><span class="NAME">io.set</span><span class="PUNC">(</span><span class="STRN">'polling duration'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="WHIT">		</span><span class="NAME">io.set</span><span class="PUNC">(</span><span class="STRN">'log level'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">	</span><span class="NAME">io.configure</span><span class="PUNC">(</span><span class="STRN">'development'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">		</span><span class="NAME">io.set</span><span class="PUNC">(</span><span class="STRN">'polling duration'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">		</span><span class="NAME">io.set</span><span class="PUNC">(</span><span class="STRN">'log level'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">	</span><span class="NAME">io.configure</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">		</span><span class="NAME">io.set</span><span class="PUNC">(</span><span class="STRN">'polling duration'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">		</span><span class="NAME">io.set</span><span class="PUNC">(</span><span class="STRN">'log level'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span> 
+<span class='line'>131</span> </span><span class="WHIT">	</span><span class="COMM">/** Build a Socket to Isolate the Application Layer */</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sb_manager</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">io</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">		</span><span class="PUNC">.</span><span class="NAME">of</span><span class="PUNC">(</span><span class="STRN">'/sb_manager'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">		</span><span class="PUNC">.</span><span class="NAME">on</span><span class="PUNC">(</span><span class="STRN">'connection'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">			</span><span class="COMM">/** Do some House Keeping to Clean Up Stored Data */</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">			</span><span class="NAME">socket.on</span><span class="PUNC">(</span><span class="STRN">'disconnect'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">				</span><span class="COMM">/** Manage Groups on Client Disconnect */</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._groups</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">					</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">						</span><span class="COMM">/** Determine Group Client belongs to */</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">my_group</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">group.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">				
+<span class='line'>147</span> 						</span><span class="COMM">/** Keep track of Clients in the Group */</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">group_clients</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">					
+<span class='line'>150</span> 						</span><span class="COMM">/** Check if Client Group Exists on Socketbug */</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">				
+<span class='line'>153</span> 							</span><span class="COMM">/** Loop through Group Clients and remove Disconnecting Client */</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">							</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">my_group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">								</span><span class="COMM">/** This is the Client that's Disconnecting */</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">								</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">my_group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">								</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">									</span><span class="COMM">/** Remove this Client from the Group */</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">									</span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">my_group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.splice</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">								</span><span class="COMM">/** There are other Clients in the Group */</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">								</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">								</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">									</span><span class="NAME">group_clients</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="WHIT">				
+<span class='line'>169</span> 							</span><span class="COMM">/** Delete the Group if all Connected Clients from Socketbug are Gone */</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">							</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">group_clients</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">								</span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">my_group</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">					</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">						</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">			
+<span class='line'>182</span> 				</span><span class="COMM">/** Manage Applications on Client Disconnect */</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._applications</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">					</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">						</span><span class="COMM">/** Determine Application Client belongs to */</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">my_application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">application.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">				
+<span class='line'>190</span> 						</span><span class="COMM">/** Keep track of Clients in the Application */</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">application_clients</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">					
+<span class='line'>193</span> 						</span><span class="COMM">/** Check if Client Application Exists on Socketbug */</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">							</span><span class="COMM">/** Loop through Application Clients and remove Disconnecting Client */</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">							</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">								</span><span class="COMM">/** This is the Client that's Disconnecting */</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">								</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">								</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">									</span><span class="COMM">/** Remove this Client from the Application */</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="WHIT">									</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.splice</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">								</span><span class="COMM">/** There are other Clients in the Application */</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="WHIT">								</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="WHIT">								</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="WHIT">									</span><span class="NAME">application_clients</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">				
+<span class='line'>212</span> 							</span><span class="COMM">/** Delete the Application if all Connected Clients from Socketbug are Gone */</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">							</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">application_clients</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">								</span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">					</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">						</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>223</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>224</span> </span><span class="WHIT">			
+<span class='line'>225</span> 				</span><span class="COMM">/** Manage Clients on Disconnect */</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._clients</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">					</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">						</span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">					</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="WHIT">						</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="WHIT">		
+<span class='line'>239</span> 			</span><span class="COMM">/** Manage Group Connections */</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="WHIT">			</span><span class="NAME">socket.on</span><span class="PUNC">(</span><span class="STRN">'connection_manager'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">group</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">application</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">client</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">	
+<span class='line'>242</span> 				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">check_auth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">			
+<span class='line'>244</span> 				</span><span class="COMM">/* Add Client to Client List */</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">				</span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> 
+<span class='line'>246</span> 					</span><span class="STRN">'client'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>247</span> </span><span class="WHIT">						</span><span class="STRN">'id'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">socket.id</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="WHIT">						</span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">''</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">					</span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'>251</span> 					</span><span class="STRN">'application'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">application</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">					</span><span class="STRN">'authenticated'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">						</span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">						</span><span class="STRN">'application'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">			
+<span class='line'>258</span> 				</span><span class="COMM">/** Check if this Group is Already Connected to Socketbug */</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">group.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">					</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Group Already Connected and Approved for Socketbug Use'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'log'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">				</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._groups</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">					</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Socketbug Server Group Authorization Required'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'warn'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">					</span><span class="NAME">check_auth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="WHIT">			
+<span class='line'>269</span> 				</span><span class="COMM">/** Check if this Application is Already Connected to Socketbug */</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">application.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>272</span> </span><span class="WHIT">					</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Application Already Connected and Approved for Socketbug Use'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>273</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">				</span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._applications</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="WHIT">					</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Socketbug Server Application Authorization Required'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'warn'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">					</span><span class="NAME">check_auth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>279</span> </span><span class="WHIT">			
+<span class='line'>280</span> 				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">check_auth</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="WHIT">					</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Checking Authorization...'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'info'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="WHIT">				
+<span class='line'>284</span> 					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._config._authorize._path</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'?cb='</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">					</span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._groups</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'&group_id='</span><span class="PUNC">+</span><span class="NAME">group.id</span><span class="PUNC">:</span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">					</span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._applications</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'&application_id='</span><span class="PUNC">+</span><span class="NAME">application.id</span><span class="PUNC">:</span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="WHIT">					
+<span class='line'>288</span> 					</span><span class="COMM">/** Setup Options for Socketbug Authorization for Group ID's */</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>290</span> 					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">				  		</span><span class="NAME">host</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">_socketbug._config._authorize._host</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">				  		</span><span class="NAME">port</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">_socketbug._config._authorize._port</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">				  		</span><span class="NAME">path</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">		
+<span class='line'>296</span> 					</span><span class="COMM">/** Establish Connection and Make request */</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">					</span><span class="NAME">http.get</span><span class="PUNC">(</span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">				        </span><span class="COMM">/** Create Variable to Store Returned JSON */</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">				
+<span class='line'>302</span> 						</span><span class="COMM">/** Build the Response in Pieces Should the JSON be Large */</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="WHIT">				        </span><span class="NAME">response.on</span><span class="PUNC">(</span><span class="STRN">'data'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">chunk</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">				            </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">chunk</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">				        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">		
+<span class='line'>308</span> 						</span><span class="COMM">/** Start Validation now that JSON is done Loading */</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">				        </span><span class="NAME">response.on</span><span class="PUNC">(</span><span class="STRN">'end'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">							</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">								</span><span class="COMM">/** Build Expected Response */</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">								</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_expected</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._groups</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">crypto.createHash</span><span class="PUNC">(</span><span class="STRN">'md5'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._encryption_salt</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'Valid Group ID: '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">group.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">digest</span><span class="PUNC">(</span><span class="STRN">"hex"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">								</span><span class="NAME">_expected</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._applications</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">crypto.createHash</span><span class="PUNC">(</span><span class="STRN">'md5'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._encryption_salt</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'Valid Application ID: '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">application.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">digest</span><span class="PUNC">(</span><span class="STRN">"hex"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">					
+<span class='line'>317</span> 								</span><span class="COMM">/** Convert JSON String to Javascript Object */</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">								</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="WHIT">					
+<span class='line'>320</span> 								</span><span class="COMM">/** Verify that the JSON Response Matched Exactly what was Expected */</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="WHIT">								</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">json.response</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">_expected</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>322</span> </span><span class="WHIT">								</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="WHIT">									</span><span class="NAME">authorize_group</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="WHIT">									</span><span class="NAME">authorize_application</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">application</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">								</span><span class="COMM">/** JSON Resonse Did NOT Match */</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">								</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">								</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">									</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._groups</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">json.group.valid</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="WHIT">									</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="WHIT">										</span><span class="NAME">authorize_group</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="WHIT">									</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="WHIT">									</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="WHIT">									</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="WHIT">										</span><span class="COMM">/** Add this Group to the Unauthorized Group List */</span><span class="WHIT">
+<span class='line'>336</span> </span><span class="WHIT">										</span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.group</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="WHIT">							
+<span class='line'>338</span> 										</span><span class="COMM">/** Communicate Unsuccesful Connection */</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">										</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Group NOT Approved for Socketbug Use'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'error'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">									</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">								
+<span class='line'>342</span> 									</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._config._authorized_only._applications</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">json.application.valid</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="WHIT">									</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">										</span><span class="NAME">authorize_application</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">application</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">									</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">									</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">									</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">										</span><span class="COMM">/** Add this Group to the Unauthorized Group List */</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="WHIT">										</span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="WHIT">							
+<span class='line'>351</span> 										</span><span class="COMM">/* Communicate Unsuccesful Connection */</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="WHIT">										</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Application NOT Approved for Socketbug Use'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'error'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="WHIT">									</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="WHIT">								</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">							
+<span class='line'>356</span> 								</span><span class="COMM">/** Send Authentication Failures */</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="WHIT">								</span><span class="NAME">authorization</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">							</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="WHIT">								</span><span class="COMM">/** Communicate Unsuccesful Connection */</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="WHIT">								</span><span class="COMM">//socket.emit('manager_response', message, 'error');</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="WHIT">				    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="WHIT">				</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>368</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>369</span> </span><span class="WHIT">					</span><span class="NAME">authorize_group</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="WHIT">					</span><span class="NAME">authorize_application</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">application</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>371</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>372</span> </span><span class="WHIT">			
+<span class='line'>373</span> 				</span><span class="COMM">/** Execute Callback Handler */</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="WHIT">					</span><span class="NAME">callback</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="WHIT">			
+<span class='line'>379</span> 			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">	</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>382</span> 
+<span class='line'>383</span> </span><span class="WHIT">	</span><span class="COMM">/** Build a Socket to Isolate the Application Layer */</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sb_application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">io</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="WHIT">		</span><span class="PUNC">.</span><span class="NAME">of</span><span class="PUNC">(</span><span class="STRN">'/sb_application'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">		</span><span class="PUNC">.</span><span class="NAME">on</span><span class="PUNC">(</span><span class="STRN">'connection'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">			</span><span class="COMM">/** Capture Console's Remote Javascript Exection Request */</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">			</span><span class="NAME">socket.on</span><span class="PUNC">(</span><span class="STRN">'execute_js'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">javascript</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">				</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">					</span><span class="COMM">/** Fetch Clients Application ID */</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">my_application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">application.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">			
+<span class='line'>396</span> 					</span><span class="COMM">/** Loop through Clients in Matching Application to Send Debug Message */</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="WHIT">					</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>398</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>399</span> </span><span class="WHIT">						</span><span class="COMM">/** Fetch Client ID for Other Connected Users */</span><span class="WHIT">
+<span class='line'>400</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">app_client</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>401</span> </span><span class="WHIT">					
+<span class='line'>402</span> 						</span><span class="COMM">/** See if Client is Authorized */</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">authorization</span><span class="PUNC">(</span><span class="NAME">app_client</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">							</span><span class="COMM">/** Send to Specific Client */</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">							</span><span class="NAME">sb_application.socket</span><span class="PUNC">(</span><span class="NAME">app_client</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'execute_js'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">javascript</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="WHIT">						
+<span class='line'>408</span> 							</span><span class="COMM">/** Execute Callback Handler */</span><span class="WHIT">
+<span class='line'>409</span> </span><span class="WHIT">							</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>410</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="WHIT">								</span><span class="NAME">callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>413</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>414</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">				</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">					</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">		
+<span class='line'>422</span> 			</span><span class="COMM">/** Capture Console's Remote View Source Request */</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">			</span><span class="NAME">socket.on</span><span class="PUNC">(</span><span class="STRN">'view_source'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">				</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">					</span><span class="COMM">/** Fetch Clients Application ID */</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">my_application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">application.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">			
+<span class='line'>430</span> 					</span><span class="COMM">/** Loop through Clients in Matching Application to Send Debug Message */</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">					</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">						</span><span class="COMM">/** Fetch Client ID for Other Connected Users */</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">app_client</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">					
+<span class='line'>436</span> 						</span><span class="COMM">/** See if Client is Authorized */</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">authorization</span><span class="PUNC">(</span><span class="NAME">app_client</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">							</span><span class="COMM">/** Send to Specific Client */</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="WHIT">							</span><span class="NAME">sb_application.emit</span><span class="PUNC">(</span><span class="STRN">'view_source'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>441</span> </span><span class="WHIT">						
+<span class='line'>442</span> 							</span><span class="COMM">/** Execute Callback Handler */</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="WHIT">							</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="WHIT">								</span><span class="NAME">callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="WHIT">				</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>452</span> </span><span class="WHIT">					</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>455</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">	</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>457</span> 
+<span class='line'>458</span> </span><span class="WHIT">	</span><span class="COMM">/** Build a Socket to Isolate the Application Layer */</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sb_console</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">io</span><span class="WHIT">
+<span class='line'>460</span> </span><span class="WHIT">		</span><span class="PUNC">.</span><span class="NAME">of</span><span class="PUNC">(</span><span class="STRN">'/sb_console'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="WHIT">		</span><span class="PUNC">.</span><span class="NAME">on</span><span class="PUNC">(</span><span class="STRN">'connection'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>462</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>463</span> </span><span class="WHIT">			</span><span class="COMM">/** Capture Client Message Event */</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="WHIT">			</span><span class="NAME">socket.on</span><span class="PUNC">(</span><span class="STRN">'debug'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">level</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">				</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">					</span><span class="COMM">/** Fetch Clients Application ID */</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">my_application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">application.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">			
+<span class='line'>471</span> 					</span><span class="COMM">/** Loop through Clients in Matching Application to Send Debug Message */</span><span class="WHIT">
+<span class='line'>472</span> </span><span class="WHIT">					</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT">						</span><span class="COMM">/** Fetch Client ID for Other Connected Users */</span><span class="WHIT">
+<span class='line'>475</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">app_client</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">					
+<span class='line'>477</span> 						</span><span class="COMM">/** See if Client is Authorized */</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">authorization</span><span class="PUNC">(</span><span class="NAME">app_client</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">							</span><span class="COMM">/** Send to Specific Client */</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">							</span><span class="NAME">sb_console.socket</span><span class="PUNC">(</span><span class="NAME">app_client</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'application_debug'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">level</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="WHIT">						
+<span class='line'>483</span> 							</span><span class="COMM">/** Execute Callback Handler */</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">							</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">								</span><span class="NAME">callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">				</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">					</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="STRN">'Error Authenticating Remote Debug Message'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="WHIT">					</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>495</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="WHIT">		
+<span class='line'>498</span> 			</span><span class="COMM">/** Capture Console's Remote View Source Request */</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">			</span><span class="NAME">socket.on</span><span class="PUNC">(</span><span class="STRN">'view_source'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">source_code</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">				</span><span class="KEYW">try</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">					</span><span class="COMM">/** Fetch Clients Application ID */</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">					</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">my_application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">application.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">			
+<span class='line'>506</span> 					</span><span class="COMM">/** Loop through Clients in Matching Application to Send Debug Message */</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">					</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">					</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="WHIT">						</span><span class="COMM">/** Fetch Client ID for Other Connected Users */</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">						</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">app_client</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">my_application</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>511</span> </span><span class="WHIT">					
+<span class='line'>512</span> 						</span><span class="COMM">/** See if Client is Authorized */</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">						</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">authorization</span><span class="PUNC">(</span><span class="NAME">app_client</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">						</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">							</span><span class="COMM">/** Send to Specific Client */</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">							</span><span class="NAME">sb_console.emit</span><span class="PUNC">(</span><span class="STRN">'view_source'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">source_code</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">						
+<span class='line'>518</span> 							</span><span class="COMM">/** Execute Callback Handler */</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="WHIT">							</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">							</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="WHIT">								</span><span class="NAME">callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">							</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">						</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">					</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="WHIT">				</span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">				</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">					</span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">error</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="WHIT">	</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>533</span> </span><span class="WHIT">	
+<span class='line'>534</span> 	</span><span class="COMM">/**
+<span class='line'>535</span> 	 * Check Authorization of Session ID
+<span class='line'>536</span> 	 * 
+<span class='line'>537</span> 	 * @param String session_id This is the Socket.IO Session ID for Socketbug
+<span class='line'>538</span> 	 * 
+<span class='line'>539</span> 	 * @return Boolean
+<span class='line'>540</span> 	 */</span><span class="WHIT"> 
+<span class='line'>541</span> 	</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">authorization</span><span class="PUNC">(</span><span class="NAME">session_id</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">	</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">		</span><span class="COMM">/** Check if Either Group or Application Authentication is False.  It is NULL by default and will only be FALSE if authentication failed. */</span><span class="WHIT">
+<span class='line'>544</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">session_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.application</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">session_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.group</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>547</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>548</span> </span><span class="WHIT">		</span><span class="COMM">/** Authorization Failed */</span><span class="WHIT">
+<span class='line'>549</span> </span><span class="WHIT">		</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>550</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>551</span> </span><span class="WHIT">			</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">session_id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'authentication_failed'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">session_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.application</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">session_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.group</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="WHIT">		
+<span class='line'>553</span> 			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>556</span> </span><span class="WHIT">	
+<span class='line'>557</span> 	</span><span class="COMM">/**
+<span class='line'>558</span> 	 * Check Authorization of Group ID
+<span class='line'>559</span> 	 * 
+<span class='line'>560</span> 	 * @param Object socket This is the Socket used by Socketbug
+<span class='line'>561</span> 	 * @param String group This is the Group ID for Socketbug
+<span class='line'>562</span> 	 */</span><span class="WHIT">
+<span class='line'>563</span> </span><span class="WHIT">	</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">authorize_group</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>564</span> </span><span class="WHIT">	</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>565</span> </span><span class="WHIT">		</span><span class="COMM">/** Set Flag to Indicate if Group is Connected on Socketbug */</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">group_found</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>567</span> </span><span class="WHIT">	
+<span class='line'>568</span> 		</span><span class="COMM">/** Loop through Connected Groups */</span><span class="WHIT">
+<span class='line'>569</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">group_id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">_socketbug._groups</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>570</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">group_id</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">group.id</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>573</span> </span><span class="WHIT">				</span><span class="NAME">group_found</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>574</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>575</span> </span><span class="WHIT">	  	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>576</span> 
+<span class='line'>577</span> </span><span class="WHIT">		</span><span class="COMM">/** This is a New Group */</span><span class="WHIT">
+<span class='line'>578</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">group_found</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>579</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>580</span> </span><span class="WHIT">			</span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">group.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> 
+<span class='line'>581</span> 			
+<span class='line'>582</span> 				</span><span class="COMM">/** Add Group Data */</span><span class="WHIT">
+<span class='line'>583</span> </span><span class="WHIT">				</span><span class="STRN">'data'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> 
+<span class='line'>584</span> 					</span><span class="STRN">'id'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">group.id</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'>585</span> 					</span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">group.name</span><span class="WHIT"> 
+<span class='line'>586</span> 				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'>587</span> 			
+<span class='line'>588</span> 				</span><span class="COMM">/** Add Client to Group */</span><span class="WHIT">
+<span class='line'>589</span> </span><span class="WHIT">				</span><span class="STRN">'clients'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="WHIT"> 
+<span class='line'>590</span> 			</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="WHIT">		</span><span class="COMM">/** Add New Client to Existing Group */</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">		</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">	
+<span class='line'>595</span> 			</span><span class="NAME">_socketbug._groups</span><span class="PUNC">[</span><span class="NAME">group.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.push</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">	
+<span class='line'>598</span> 		</span><span class="COMM">/** Tell Socketbug that Client can Communicate with Group */</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">		</span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.group</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="WHIT">	
+<span class='line'>601</span> 		</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Group Authorized for Socketbug Use'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'info'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>602</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>603</span> </span><span class="WHIT">	
+<span class='line'>604</span> 	</span><span class="COMM">/**
+<span class='line'>605</span> 	 * Check Authorization of Application ID
+<span class='line'>606</span> 	 * 
+<span class='line'>607</span> 	 * @param Object socket This is the Socket used by Socketbug
+<span class='line'>608</span> 	 * @param String application This is the Application ID for Socketbug
+<span class='line'>609</span> 	 */</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">	</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">authorize_application</span><span class="PUNC">(</span><span class="NAME">socket</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">application</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">	</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">		</span><span class="COMM">/** Set Flag to Indicate if Application is Connected on Socketbug */</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">application_found</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>614</span> </span><span class="WHIT">	
+<span class='line'>615</span> 		</span><span class="COMM">/** Loop through Connected Applications */</span><span class="WHIT">
+<span class='line'>616</span> </span><span class="WHIT">		</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">application_id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">_socketbug._applications</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>617</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>618</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">application_id</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">application.id</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>619</span> </span><span class="WHIT">			</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>620</span> </span><span class="WHIT">				</span><span class="NAME">application_found</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">	  	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>623</span> 
+<span class='line'>624</span> </span><span class="WHIT">		</span><span class="COMM">/** This is a New Application */</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">application_found</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>626</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">			</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">application.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> 
+<span class='line'>628</span> 			
+<span class='line'>629</span> 				</span><span class="COMM">/** Add Application Data */</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">				</span><span class="STRN">'data'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> 
+<span class='line'>631</span> 					</span><span class="STRN">'id'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">application.id</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'>632</span> 					</span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">application.name</span><span class="WHIT"> 
+<span class='line'>633</span> 				</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'>634</span> 			
+<span class='line'>635</span> 				</span><span class="COMM">/** Add Client to Application */</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">				</span><span class="STRN">'clients'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="WHIT"> 
+<span class='line'>637</span> 			</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>638</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">		</span><span class="COMM">/** Add New Client to Existing Application */</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="WHIT">		</span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="WHIT">		</span><span class="PUNC">{</span><span class="WHIT">	
+<span class='line'>642</span> 			</span><span class="NAME">_socketbug._applications</span><span class="PUNC">[</span><span class="NAME">application.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">clients.push</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>643</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="WHIT">	
+<span class='line'>645</span> 		</span><span class="COMM">/** Tell Socketbug that Client can Communicate with Application */</span><span class="WHIT">
+<span class='line'>646</span> </span><span class="WHIT">		</span><span class="NAME">_socketbug._clients</span><span class="PUNC">[</span><span class="NAME">socket.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">authenticated.application</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>647</span> </span><span class="WHIT">	
+<span class='line'>648</span> 		</span><span class="NAME">sb_manager.socket</span><span class="PUNC">(</span><span class="NAME">socket.id</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">emit</span><span class="PUNC">(</span><span class="STRN">'manager_response'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Application Authorized for Socketbug Use'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'info'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

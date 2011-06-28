@@ -1,3 +1,7 @@
+[__Home__](https://github.com/manifestinteractive/socketbug/wiki)  &nbsp;&middot;&nbsp;  [Install Server](https://github.com/manifestinteractive/socketbug/wiki/Install-Server)  &nbsp;&middot;&nbsp;  [Install Application](https://github.com/manifestinteractive/socketbug/wiki/Install-Application)  &nbsp;&middot;&nbsp;  [Install Console](https://github.com/manifestinteractive/socketbug/wiki/Install-Console)
+
+---
+
 ![Socketbug Logo](http://github.socketbug.com/logo.png "Socketbug - Remote Debugging using Socket.IO")
 
 ![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
