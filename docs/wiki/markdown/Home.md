@@ -6,7 +6,7 @@
 
 ---
 
-![Info Graphic](http://github.socketbug.com/sb_info.png)
+<center>![Info Graphic](http://github.socketbug.com/sb_info.png)</center>
 
 ![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
 
