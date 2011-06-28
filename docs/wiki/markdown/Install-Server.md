@@ -1,4 +1,8 @@
-[Home](https://github.com/manifestinteractive/socketbug/wiki)  &nbsp;&middot;&nbsp;  [__Install Server__](https://github.com/manifestinteractive/socketbug/wiki/Install-Server)  &nbsp;&middot;&nbsp;  [Install Application](https://github.com/manifestinteractive/socketbug/wiki/Install-Application)  &nbsp;&middot;&nbsp;  [Install Console](https://github.com/manifestinteractive/socketbug/wiki/Install-Console)
+**MENU:**&nbsp;&nbsp;&nbsp;[HOME](https://github.com/manifestinteractive/socketbug/wiki)  &nbsp;&middot;&nbsp;  [__SERVER__](https://github.com/manifestinteractive/socketbug/wiki/Install-Server)  &nbsp;&middot;&nbsp;  [APPLICATION](https://github.com/manifestinteractive/socketbug/wiki/Install-Application)  &nbsp;&middot;&nbsp;  [CONSOLE](https://github.com/manifestinteractive/socketbug/wiki/Install-Console)
+
+---
+
+![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
 
 ---
 
@@ -6,17 +10,9 @@
 
 ![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
 
----
+#Socketbug Server Installation Video
 
-**![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)**
-
-**![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")**
-
-**![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)**
-
-#Socketbug Installation Video
-
-<iframe src="http://player.vimeo.com/video/25702064?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe><p><a href="http://vimeo.com/25702064">Socketbug Server Installation</a> from <a href="http://vimeo.com/user7532036">Socketbug Dev</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+<p><iframe src="http://player.vimeo.com/video/25702064?title=0&amp;byline=0&amp;portrait=0" width="700" height="394" frameborder="0"></iframe><p>Video Tutorial on how to do a Socketbug Server Installation</p></p> 
 
 #Installing Socketbug - The Server
 

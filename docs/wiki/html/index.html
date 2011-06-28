@@ -2,33 +2,47 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Server Installation</title>
+	<title>Socketbug</title>
 	<link href="css/style.css" rel="stylesheet" media="all">
 </head>
 <body>
 	
-<p><img src="http://github.socketbug.com/logo.png" alt="Socketbug Logo" title="Socketbug - Remote Debugging using Socket.IO" /></p>
-
-<p><img src="http://github.socketbug.com/lgplv3.png" alt="License" title="LGPL v3 license" /> Socketbug is licensed under the LGPL v3 license.</p>
+<p><strong>MENU:</strong>&nbsp;&nbsp;&nbsp;<a href="index.html"><strong>HOME</strong></a>  &nbsp;&middot;&nbsp;  <a href="install_server.html">SERVER</a>  &nbsp;&middot;&nbsp;  <a href="install_application.html">APPLICATION</a>  &nbsp;&middot;&nbsp;  <a href="install_console.html">CONSOLE</a></p>
 
 <hr />
 
-<p><strong><img src="http://github.socketbug.com/information.png" alt="Vimeo " title="" /> <a href="http://www.vimeo.com/user7532036/videos"> Video Tutorials ( HD )</a></strong></p>
+<p><img src="http://github.socketbug.com/information.png" alt="Vimeo " title="" /> <a href="http://www.vimeo.com/user7532036/videos"> Video Tutorials ( HD )</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://github.socketbug.com/twitter.png" alt="Twitter " title="" /> <a href="https://twitter.com/#!/socketbug_dev" title="Follow Socketbug on Twitter"> Follow Updates @socketbug_dev</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://github.socketbug.com/bug.png" alt="Support " title="" /> <a href="http://socketbug.userecho.com/"> Support &amp; Feature Requests</a></p>
 
-<p><strong><img src="http://github.socketbug.com/twitter.png" alt="Twitter " title="" /> <a href="https://twitter.com/#!/socketbug_dev" title="Follow Socketbug on Twitter"> Follow Updates @socketbug_dev</a></strong></p>
+<hr />
 
-<p><strong><img src="http://github.socketbug.com/bug.png" alt="Support " title="" /> <a href="http://socketbug.userecho.com/"> Support &amp; Feature Requests</a></strong></p>
+<p><img src="http://github.socketbug.com/sb_info.png" alt="Info Graphic" title="" /></p>
 
-<h1 id="socketbug_menu">Socketbug Menu</h1>
+<p><img src="http://github.socketbug.com/lgplv3.png" alt="License" title="LGPL v3 license" /> Socketbug is licensed under the LGPL v3 license.</p>
 
-<p>The following pages contain what you will need to know to get everything up and running:</p>
+<h1 id="socketbug_requirements">Socketbug Requirements</h1>
 
 <ul>
-<li><p><a href="intro.html"><strong>Socketbug Introduction</strong></a>   </p></li>
-<li><p><a href="install_server.html"><strong>Install Server</strong></a>  </p></li>
-<li><p><a href="install_application.html"><strong>Install Application</strong></a>  </p></li>
-<li><p><a href="install_console.html"><strong>Install Console</strong></a>  </p></li>
+<li><p><a href="http://nodejs.org/" title="Check out Node.js"><strong>Node.js</strong> ( v0.4+ )</a></p></li>
+<li><p><a href="http://socket.io/" title="Check out Node.js"><strong>Socket.IO</strong> ( v0.7+ )</a></p></li>
+<li><p><strong>Knowledge on how to use git</strong> ( <a href="http://help.github.com/mac-set-up-git/">Linux</a>, <a href="http://help.github.com/linux-set-up-git">Mac OSX</a>, or  <a href="http://help.github.com/win-set-up-git">Windows</a> )</p></li>
+<li><p><strong>Knowledge on how to use a Terminal Window</strong></p></li>
 </ul>
+
+<p>But not to worry, our Installation Instructions will get you setup with the required libraries.  And our video should help most through any terminal issues ;)</p>
+
+<h1 id="socketbug_what_is_it">Socketbug - What is it?</h1>
+
+<p>The technology behind Mobile Web Applications has been growing at a tremendous rate.  Mobile Application Developers, while able to produce amazing applications, are limited by the native browsers own limited functionality. Basic features available on desktop browsers are completely absent from mobile browsers. The ability to view source code, debug javascript, or even execute a javascript command from a console are all tools developers have come to expect while developing websites.  So why are these features lacking for mobile web application developers?</p>
+
+<p>This is where Socketbug fills the gap! Socketbug is a Remote Debugging Utility built using <a href="http://socket.io" title="Socket.IO">Socket.IO</a>. This means you can now use modern browsers ( both mobile and desktop ) to work together to allow you to remotely debug you mobile web applications.</p>
+
+<h1 id="debugging_your_mobile_applications_with_socketbug">Debugging your Mobile Applications with Socketbug</h1>
+
+<p>Socketbug is built on top of <a href="http://nodejs.org/" title="Check out Node.js">Node.js</a> using <a href="http://socket.io/" title="Check out Node.js">Socket.IO</a> (currently v0.7) as the main backend for communication. Socket.IO automatically determines what communication transport to use and enables your mobile application to send/receive messages from other connected devices.</p>
+
+<p>To use Socketbug you will need to install our server code in a central location that will be accessible by all devices that will be sending or receiving data.  This can be anything from your laptop/desktop, or a remote server.  There are no Cross Domain issues to worry about so you do not have to have Socketbug installed on the same machine that your mobile application is installed on.</p>
+
+<p>To make things easy, Socketbug also has a native console that was created for you to connect to your Socketbug Server.  Once your server is installed you should literally just need to copy some javascript code into your Mobile Application, and then open up the Socketbug Console.</p>
 
 </body>
 </html>
