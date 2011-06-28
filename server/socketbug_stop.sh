@@ -7,4 +7,4 @@
 BASEDIR=$(dirname $0)
 
 # Stop Server
-forever stop $BASEDIR/socketbug.js
+forever stop $BASEDIR/socketbug_server.js

@@ -7,4 +7,4 @@
 BASEDIR=$(dirname $0)
 
 # Restart Server
-forever restart $BASEDIR/socketbug.js
+forever restart $BASEDIR/socketbug_server.js

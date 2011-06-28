@@ -1,4 +1,4 @@
-**MENU:**&nbsp;&nbsp;&nbsp;[HOME](https://github.com/manifestinteractive/socketbug/wiki)  &nbsp;&middot;&nbsp;  [SERVER](https://github.com/manifestinteractive/socketbug/wiki/Install-Server)  &nbsp;&middot;&nbsp;  [APPLICATION](https://github.com/manifestinteractive/socketbug/wiki/Install-Application)  &nbsp;&middot;&nbsp;  [CONSOLE](https://github.com/manifestinteractive/socketbug/wiki/Install-Console)
+**MENU:**&nbsp;&nbsp;&nbsp;[__HOME__](https://github.com/manifestinteractive/socketbug/wiki)  &nbsp;&middot;&nbsp;  [SERVER](https://github.com/manifestinteractive/socketbug/wiki/Install-Server)  &nbsp;&middot;&nbsp;  [APPLICATION](https://github.com/manifestinteractive/socketbug/wiki/Install-Application)  &nbsp;&middot;&nbsp;  [CONSOLE](https://github.com/manifestinteractive/socketbug/wiki/Install-Console)
 
 ---
 
