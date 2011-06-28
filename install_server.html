@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Server Installation</title>
+	<link href="css/style.css" rel="stylesheet" media="all">
+</head>
+<body>
+
+<p><a href="http://manifestinteractive.github.com/socketbug">Home</a>  &nbsp;&middot;&nbsp;  <a href="http://manifestinteractive.github.com/socketbug/install_server.html"><strong>Install Server</strong></a>  &nbsp;&middot;&nbsp;  <a href="http://manifestinteractive.github.com/socketbug/install_application.html">Install Application</a>  &nbsp;&middot;&nbsp;  <a href="http://manifestinteractive.github.com/socketbug/install_console.html">Install Console</a></p>
+
+<hr />
+
+<p><img src="http://github.socketbug.com/logo.png" alt="Socketbug Logo" title="Socketbug - Remote Debugging using Socket.IO" /></p>
+
+<p><img src="http://github.socketbug.com/lgplv3.png" alt="License" title="LGPL v3 license" /> Socketbug is licensed under the LGPL v3 license.</p>
+
+<hr />
+
+<p><strong><img src="http://github.socketbug.com/information.png" alt="Vimeo " title="" /> <a href="http://www.vimeo.com/user7532036/videos"> Video Tutorials ( HD )</a></strong></p>
+
+<p><strong><img src="http://github.socketbug.com/twitter.png" alt="Twitter " title="" /> <a href="https://twitter.com/#!/socketbug_dev" title="Follow Socketbug on Twitter"> Follow Updates @socketbug_dev</a></strong></p>
+
+<p><strong><img src="http://github.socketbug.com/bug.png" alt="Support " title="" /> <a href="http://socketbug.userecho.com/"> Support &amp; Feature Requests</a></strong></p>
+
+<h1 id="socketbug_installation_video">Socketbug Installation Video</h1>
+
+<p><iframe src="http://player.vimeo.com/video/25702064?title=0&amp;byline=0&amp;portrait=0" width="400" height="300" frameborder="0"></iframe><p><a href="http://vimeo.com/25702064">Socketbug Server Installation</a> from <a href="http://vimeo.com/user7532036">Socketbug Dev</a> on <a href="http://vimeo.com">Vimeo</a>.</p></p>
+
+<h1 id="installing_socketbug_the_server">Installing Socketbug - The Server</h1>
+
+<p><strong>Please Note:</strong>  We are assuming with the following instructions, that you want to build a local copy of the Socketbug Server.  If this is the case, then we are also going to assume that you have working knowledge of how to use git.  Git will be used for almost every part of setting up the Socketbug server.  If you need more information on how to use git, please check out the following sites for your Operating System:</p>
+
+<ul>
+<li><a href="http://help.github.com/mac-set-up-git/" title="Set Up Git - Linux">Set Up Git - Linux</a></li>
+<li><a href="http://help.github.com/linux-set-up-git" title="Set Up Git - Mac OSX">Set Up Git - Mac OSX</a></li>
+<li><a href="http://help.github.com/win-set-up-git" title="Set Up Git - Windows">Set Up Git - Windows</a></li>
+</ul>
+
+<h2 id="1_build_and_install_nodejs">#1 Build and Install Node.js</h2>
+
+<p><strong>FOLLOW ORIGINAL INSTRUCTIONS <a href="https://github.com/joyent/node/wiki/Installation" title="Building and Installing Node.js">FOUND HERE</a>, OR&#8230;</strong></p>
+
+<p>We preferred the following setup for our Linux installation:</p>
+
+<p>First, change to a temp directory where you can download the source code for building. We like /usr/local/src as it is available on most Unix based machines. So lets make a temp folder here:</p>
+
+<pre><code>cd /usr/local/src
+sudo mkdir /usr/local/src/socketbug
+sudo chmod 777 /usr/local/src/socketbug
+cd /usr/local/src/socketbug
+</code></pre>
+
+<p>Now that we are in the temp folder, download and install Node.js</p>
+
+<pre><code>git clone --depth 1 https://github.com/joyent/node.git
+cd node
+git checkout origin/v0.4
+export JOBS=2
+sudo ./configure --prefix=/usr/local
+sudo make
+sudo make install
+</code></pre>
+
+<p>Then Install the Node.js Package Manager (NPM):</p>
+
+<pre><code>curl http://npmjs.org/install.sh | sudo sh
+</code></pre>
+
+<p>Let&#8217;s verify that everything was installed correctly before removing the Node.js source code folder. Run the following commands to verify the installations were successful:</p>
+
+<pre><code>which node
+</code></pre>
+
+<p>This should return a path to where Node.js is installed.  If it returns nothing, then Node.js was not installed correctly.  Now verify the NPM installed correctly:</p>
+
+<pre><code>which npm
+</code></pre>
+
+<p>This should also return a path to where NPM is installed.  If it returns nothing, then NPM was not installed correctly.</p>
+
+<p>Once you have verified that everything is installed correctly, you can remove the source code we downloaded to install everything:</p>
+
+<pre><code>cd /usr/local/src/socketbug
+sudo rm -fr /usr/local/src/socketbug/node
+</code></pre>
+
+<h2 id="2_setup_socketbug_to_use_nodejs">#2 Setup Socketbug to use Node.js</h2>
+
+<p>Pick a place on your server where you want to install the Socketbug Server. For this writeup, we will use /usr/local/socketbug.  You can use whatever directory you wish.</p>
+
+<pre><code>sudo mkdir /usr/local/socketbug/
+sudo chmod 777 /usr/local/socketbug
+</code></pre>
+
+<h2 id="3_download_socketbug">#3 Download Socketbug</h2>
+
+<p>For the Socketbug Server, we really only need a few files, so let&#8217;s change back to our temp directory before downloading Socketbug.</p>
+
+<pre><code>cd /usr/local/src/socketbug
+</code></pre>
+
+<p>If are using git, you can just run the following command from the directory you already setup for Socketbug:</p>
+
+<pre><code>git clone https://github.com/manifestinteractive/socketbug.git .
+</code></pre>
+
+<p>Notice the &#8216;.&#8217; at the end of the git command.  This will check it out in your current directory, rather than creating a new directory for you.</p>
+
+<p>Now you can copy the server files over into where you will run your Socketbug server.</p>
+
+<pre><code>cp -R /usr/local/src/socketbug/server/* /usr/local/socketbug
+</code></pre>
+
+<p>If you are going to use Socketbug as a service, you will need to set permissions to the log folder:</p>
+
+<pre><code>sudo chmod 777 /usr/local/socketbug/logs
+</code></pre>
+
+<h2 id="4_install_socketio_packages_into_socketbug_server_folder">#4 Install Socket.IO Packages into Socketbug Server Folder</h2>
+
+<p>Change into the Socketbug Server directory</p>
+
+<pre><code>cd /usr/local/socketbug
+</code></pre>
+
+<p><strong>While still in the /usr/local/socketbug directory, run the following commands</strong></p>
+
+<p>Install Node.js Package <strong>socket.io</strong>:</p>
+
+<pre><code>sudo npm install socket.io
+</code></pre>
+
+<p>Install Node.js Package <strong>forever</strong> ( to run Socketbug as a service ):</p>
+
+<pre><code>sudo npm install forever -g
+</code></pre>
+
+<p>You will need this if you want to use our bash scripts. </p>
+
+<h2 id="5_configure_socketbug_server">#5 Configure Socketbug Server</h2>
+
+<p>Before you can start Socketbug you will need to open the server file and make a few changes:</p>
+
+<pre><code>nano socketbug_server.js
+</code></pre>
+
+<p>Look for <code>var _socketbug</code> to find the configuration variable for the Socketbug Server.</p>
+
+<h3 id="here_is_a_breakdown_of_settings">Here is a breakdown of settings:</h3>
+
+<ul>
+<li><p><code>_socketbug._config._server_port</code> <em>( Number )</em>: <strong>8080</strong></p>
+
+<p>This is your Socketbug Server Port Number Where Socket.IO is Running</p></li>
+<li><p><code>_socketbug._config._authorized_only._groups</code> <em>( Boolean )</em>: <strong>true</strong></p>
+
+<p>Should Group Authentication Be Required? If this is set to true then all connections will have their Group ID authenticated on whatever server you specify below</p></li>
+<li><p><code>_socketbug._config._authorized_only._applications</code> <em>( Boolean )</em>: <strong>true</strong></p>
+
+<p>Should Application Authentication Be Required? If this is set to true then all connections will have their Application ID authenticated on whatever server you specify below</p></li>
+<li><p><code>_socketbug._config._authorize._host</code> <em>( String )</em>: <strong>www.mywebsite.com</strong></p>
+
+<p>Host URL ( NOTE: do not add http:// or a trailing / ) to Authentication  Script. This can be any server.  It does not have to be on the same  server that Socketbug is installed on.</p></li>
+<li><p><code>_socketbug._config._authorize._port</code> <em>( Number )</em>: <strong>80</strong></p>
+
+<p>Port Number for your Authentication Script</p></li>
+<li><p><code>_socketbug._config._authorize._path</code> <em>( String )</em>: <strong>/path/to/my/auth.script</strong></p>
+
+<p>Path from root of Authentication Script. Basically, this gets appended to <em>socketbug.</em>config.<em>authorize.</em>host to make a complete URL. ( NOTE: This should start with a / )</p></li>
+<li><p><code>_socketbug._config._encryption_salt</code> <em>( String )</em>: <strong>Go0dp4$sW0rd</strong></p>
+
+<p>SALT you would like to use for MD5 Hashing.  This is the SAME SALT you will use throughout your Socketbug Communications.</p></li>
+<li><p><code>_socketbug._groups</code> <em>( Object )</em></p>
+
+<p>Object to Store Socketbug Groups.  You will not need to mess with this, it&#8217;s just for storing connection info on Socketbug.</p></li>
+<li><p><code>_socketbug._applications</code> <em>( Object )</em></p>
+
+<p>Object to Store Socketbug Applications.  You will not need to mess with this, it&#8217;s just for storing connection info on Socketbug.</p></li>
+<li><p><code>_socketbug._clients</code> <em>( Object )</em></p>
+
+<p>Object to Store Socketbug Clients.  You will not need to mess with this, it&#8217;s just for storing connection info on Socketbug.</p></li>
+</ul>
+
+<h2 id="6_start_socketbug_server">#6 Start Socketbug Server</h2>
+
+<p>If you would prefer to just run Socketbug in your Terminal Window and not as a Service:</p>
+
+<pre><code>node socketbug_server.js
+</code></pre>
+
+<p>If you would like to run it as a service, you can just use the supplied BASH files in the Socketbug Server directory.</p>
+
+<ul>
+<li><p><code>socketbug_start</code> </p>
+
+<p>Double Click to <strong>START</strong> the Socketbug Server as a Service ( assuming you installed the Forever Node.js Package )</p></li>
+<li><p><code>socketbug_stop</code> </p>
+
+<p>Double Click to <strong>STOP</strong> the Socketbug Server as a Service ( assuming you installed the Forever Node.js Package )</p></li>
+<li><p><code>socketbug_restart</code> </p>
+
+<p>Double Click to <strong>RESTART</strong> the Socketbug Server as a Service ( assuming you installed the Forever Node.js Package )</p></li>
+</ul>
+
+
+</body>
+</html>
