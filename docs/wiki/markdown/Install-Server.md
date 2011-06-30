@@ -2,7 +2,7 @@
 
 ---
 
-![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
+![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/socketbug/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
 
 ---
 
@@ -12,7 +12,9 @@
 
 #Socketbug Server Installation Video
 
-<p><iframe src="http://player.vimeo.com/video/25702064?title=0&amp;byline=0&amp;portrait=0" width="700" height="394" frameborder="0"></iframe><p>Video Tutorial on how to do a Socketbug Server Installation</p></p> 
+###![Vimeo ](http://github.socketbug.com/information.png) [Watch our Video Tutorial on How to do a Socketbug Server Installation](http://www.vimeo.com/socketbug/server-install)
+
+Then you can follow along below ;)
 
 #Installing Socketbug - The Server
 
