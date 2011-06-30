@@ -2,13 +2,21 @@
 
 ---
 
-![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/user7532036/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
+![Vimeo ](http://github.socketbug.com/information.png) [ Video Tutorials ( HD )](http://www.vimeo.com/socketbug/videos)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Twitter ](http://github.socketbug.com/twitter.png) [ Follow Updates @socketbug_dev](https://twitter.com/#!/socketbug_dev "Follow Socketbug on Twitter")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Support ](http://github.socketbug.com/bug.png) [ Support & Feature Requests](http://socketbug.userecho.com/)
 
 ---
 
 ![Info Graphic](http://github.socketbug.com/sb_info.png)
 
 ![License](http://github.socketbug.com/lgplv3.png "LGPL v3 license") Socketbug is licensed under the LGPL v3 license.
+
+#Socketbug Introduction Video
+
+###![Vimeo ](http://github.socketbug.com/information.png) [Watch our 3 Minute Teaser Video](http://www.vimeo.com/socketbug/teaser)
+
+###![Vimeo ](http://github.socketbug.com/information.png) [Watch our Full 10 Minute Socketbug Introduction Video](http://www.vimeo.com/socketbug/introduction)
+
+We'll show you the good stuff before you do any work :)
 
 #Socketbug Requirements
 
