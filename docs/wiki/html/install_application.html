@@ -21,15 +21,237 @@
 
 <h1 id="installing_socketbug_the_application">Installing Socketbug - The Application</h1>
 
+<h3 id="if_you_have_not_already_setup_your_socketbug_server_you_should_do_this_first">If you have not already setup your Socketbug Server, you should <a href="install_server.html"><strong>DO THIS FIRST</strong></a>.</h3>
+
 <p>With the Socketbug Server up and running, it&#8217;s time to connect your Mobile Web Application.</p>
 
-<p>To do this you will need to install the Client Side code.  This can be on the same machine that has your server running on it, but it certainly does not have to be.</p>
+<p>To do this you will need to use the Socketbug Client Side code.  This can be on the same machine that has your server running on it, but it certainly does not have to be.</p>
 
 <p>The purpose of the Client Application code is for your Mobile Web Applications to have a place to connect to a central location that will handle communication with the Socketbug Server&#8230; which may very well be located on a completely different server.  How you set this up is entirely up to you.</p>
 
-<p>If you have not already setup your Socketbug Server, you should <a href="install_server.html">do this first</a>.</p>
+<h2 id="1_setting_up_the_socketbug_client_application">#1 Setting up the Socketbug Client Application</h2>
 
-<p>More Coming Soon&#8230;</p>
+<p>To connect your Application to Socketbug, you will need public access to the <strong>client</strong> folder contained in the Socketbug Repository.  </p>
+
+<h3 id="this_can_be_achieved_by_hosting_the_client_application_code_on_your">This can be achieved by Hosting the Client Application Code on Your:</h3>
+
+<ol>
+<li><p><strong>Local Development Machine</strong></p></li>
+<li><p><strong>Central Server</strong></p></li>
+<li><p><strong>Content Distribution Network</strong> ( CDN )</p></li>
+</ol>
+
+<p>The code that needs to be copied over from the Socketbug Repository is located in the <strong>./client/application/</strong> folder.</p>
+
+<p>If you do not already have a copy of the Socketbug code, you can download the code to a folder of your choice.</p>
+
+<p>If you are running a local server, like Apache, you may want to stick Socketbug in your local servers Document Root.</p>
+
+<p>The Document Root is what is shown when you go to http://localhost/ on your machine. So it might be nice to setup Socketbug in http://localhost/socketbug/ .</p>
+
+<p>If you do not know where your Document Root is, here are a few common locations for some popular Programs:</p>
+
+<p><strong>XAMPP:</strong></p>
+
+<ul>
+<li><strong>PC</strong>: C:\xampp\xampp\htdocs</li>
+<li><strong>MAC</strong>: /Applications/XAMPP/xamppfiles/htdocs/</li>
+</ul>
+
+<p><strong>MAMP:</strong></p>
+
+<ul>
+<li><strong>MAC</strong>: /Applications/MAMP/htdocs/</li>
+</ul>
+
+<p>So let&#8217;s go ahead an assume you need to download Socketbug, and that you want to stick it in your Document Root. Also, just for this example, let&#8217;s say your Document Root is /var/www/html, as that is pretty common on some servers. </p>
+
+<p><strong>Now, let&#8217;s download Socketbug:</strong></p>
+
+<pre><code>cd /var/www/html
+git clone https://github.com/manifestinteractive/socketbug.git
+</code></pre>
+
+<p>A new folder was created in your Document Root called socketbug and you should be able to access the folder http://localhost/socketbug/ . If you have directory listing turned off, you can got to the example folder to verify you downloaded Socketbug to the correct folder:</p>
+
+<p>http://localhost/socketbug/client/example</p>
+
+<h2 id="2_connect_your_application_to_socketbug">#2 Connect Your Application to Socketbug</h2>
+
+<p>To connect your application to Socketbug, you will need to copy the following code into the HTML of your Application directly before the closing body tag <code>&lt;/body&gt;</code>.  The <strong>FULL EXAMPLE</strong> contains the entire code you will need with all possible variables that can be set.  The <strong>MINIMUM REQUIRED EXAMPLE</strong> contains the entire code you will need with everything that is required to be set for Socketbug to run.  </p>
+
+<p><strong>Note</strong>: For this example, we are still assuming your Socketbug Client code is located at http://localhost/socketbug/ . You will need to update this if it is not your actual location.</p>
+
+<h3 id="you_only_need_to_copy_one_of_these_examples">You only need to copy one of these examples:</h3>
+
+<p><strong>FULL EXAMPLE:</strong></p>
+
+<pre><code>&lt;script type="text/javascript"&gt;
+var _sbs = _sbs || {
+
+    'version': '0.2.0',
+    'host': 'http://localhost',
+    'port': 8080,
+    'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
+    'group_name': 'Socketbug Demo Group',
+    'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
+    'application_name': 'Socketbug Demo Application',
+    'debug_level': 4,
+    'helpers': [],
+    'libraries': [],
+    'plugins': [],
+    'connect_callback': socketbug_connect_callback,
+    'disconnect_callback': socketbug_disconnect_callback,
+    'message_callback': socketbug_message_callback
+
+};
+&lt;/script&gt;
+&lt;script type="text/javascript" data-main="http://localhost/socketbug/client/application/lib/init" src="http://localhost/socketbug/client/application/sb.js" async&gt;&lt;/script&gt;
+</code></pre>
+
+<p><strong>MINIMUM REQUIRED EXAMPLE:</strong></p>
+
+<pre><code>&lt;script type="text/javascript"&gt;
+var _sbs = _sbs || {
+
+    'version': '0.2.0',
+    'host': 'http://localhost',
+    'port': 8080,
+    'group_id': '4704808A-80A9-6DD3-341F-E18A3F00563A',
+    'group_name': 'Socketbug Demo Group',
+    'application_id': '5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C',
+    'application_name': 'Socketbug Demo Application',
+    'debug_level': 4
+
+};
+&lt;/script&gt;
+&lt;script type="text/javascript" data-main="http://localhost/socketbug/client/application/lib/init" src="http://localhost/socketbug/client/application/sb.js" async&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Before you try to connect, you will need to update some of the variables.  Here is an explanation of what each of them are, and what they do in Socketbug.  The ones labeled as <strong>REQUIRED</strong> are just that. Socketbug will fail if these are not set.  The ones labeled <strong>OPTIONAL</strong> can be left out entirely with no issues.</p>
+
+<ul>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.version</code> <em>( String )</em>: <strong>0.2.0</strong></p>
+
+<p>This should be set to the Current Socketbug Version you are using.</p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.host</code> <em>( String )</em>: <strong>http://localhost</strong></p>
+
+<p>This is where the Socketbug Server is located. Make sure to use http:// in the Host URL</p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.port</code> <em>( Number )</em>: <strong>8080</strong></p>
+
+<p>This is the Port Number you are Running Socketbug on.</p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.group_id</code> <em>( String )</em>: <strong>4704808A-80A9-6DD3-341F-E18A3F00563A</strong></p>
+
+<p>This is the Unique Group ID you want to use. A Group ID is the top most level of a Socketbug Connection.  One Group can have multiple Applications.  Each Application can have multiple Clients.  The Group ID will act to organize your Socketbug Server, while also allowing you to issue a GUID to whomever you wish.  If the Socketbug Server has Authentication enabled, your Group ID&#8217;s will be verified so you can make sure only users with valid Group ID&#8217;s can connect.</p>
+
+<p>If you would like a tool to generate GUID&#8217;s for your team, you can use our Online GUID Generator located here:  </p>
+
+<p><a href="http://guid.it" target="_blank">http://guid.it</a></p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.group_name</code> <em>( String )</em>: <strong>Socketbug Demo Group</strong></p>
+
+<p>This is a Human Readable Group Name</p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.application_id</code> <em>( String )</em>: <strong>5E3E8FB6-86CF-6BF8-B4C4-6B2497BC388C</strong></p>
+
+<p>This is the Unique Application ID you want to use. An Application ID is the next highest level of a Socketbug Connection.  One Group can have multiple Applications.  Each Application can have multiple Clients.  The Application ID will act to organize your Socketbug Server, while also allowing you to issue a GUID to whomever you wish.  If the Socketbug Server has Authentication enabled, your Application ID&#8217;s will be verified so you can make sure only users with valid Application ID&#8217;s can connect.</p>
+
+<p>If you would like a tool to generate GUID&#8217;s for your team, you can use our Online GUID Generator located here:  </p>
+
+<p><a href="http://guid.it" target="_blank">http://guid.it</a></p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.application_name</code> <em>( String )</em>: <strong>Socketbug Demo Application</strong></p>
+
+<p>This is a Human Readable Application Name</p></li>
+<li><p><strong>REQUIRED</strong>: <code>_sbs.debug_level</code> <em>( Number )</em>: <strong>4</strong></p>
+
+<p>This sets the amount of Debug Information you wish to capture in your Application:</p>
+
+<p><code>5</code> = log, debug, info, warn, &amp; error <br />
+<code>4</code> = debug, info, warn, &amp; error <br />
+<code>3</code> = info, warn, &amp; error <br />
+<code>2</code> = warn, &amp; error <br />
+<code>1</code> = error <br />
+<code>0</code> = disable all debug messages</p></li>
+<li><p><strong>OPTIONAL</strong>: <code>_sbs.helpers</code> <em>( Array )</em>: <strong>[ &#8216;relative/path/to/helper&#8217;, &#8216;http://absolute.path/to/helper&#8217; ]</strong></p>
+
+<p>This is a bracketed array of the javascript files you want to load as helpers.  These will be loaded BEFORE Socketbug and Socket.IO are connected. You do not need to add the .js extension to the file names, but these files should be Javascript files.  Nothing is required here, just a way for you to preload some helper files, if you wanted to. If you are not going to load anything, just leave it as [].</p></li>
+<li><p><strong>OPTIONAL</strong>: <code>_sbs.libraries</code> <em>( Array )</em>: <strong>[ &#8216;relative/path/to/library&#8217;, &#8216;http://absolute.path/to/library&#8217; ]</strong></p>
+
+<p>This is a bracketed array of the javascript files you want to load as libraries.  These will be loaded BEFORE Socketbug and Socket.IO are connected. You do not need to add the .js extension to the file names, but these files should be Javascript files. Nothing is required here, just a way for you to preload some library files, if you wanted to. If you are not going to load anything, just leave it as [].</p></li>
+<li><p><strong>OPTIONAL</strong>: <code>_sbs.plugins</code> <em>( Array )</em>: <strong>[ &#8216;relative/path/to/plugin&#8217;, &#8216;http://absolute.path/to/plugin&#8217; ]</strong></p>
+
+<p>This is a bracketed array of the javascript files you want to load as plugins.  These will be loaded BEFORE Socketbug and Socket.IO are connected. You do not need to add the .js extension to the file names, but these files should be Javascript files. Nothing is required here, just a way for you to preload some plugin files, if you wanted to. If you are not going to load anything, just leave it as [].</p>
+
+<p><strong>Note:</strong>  There is a sample native Socketbug plugin in <strong>./client/application/plugins/sample.js</strong></p></li>
+<li><p><strong>OPTIONAL</strong>: <code>_sbs.connect_callback</code> <em>( Function )</em>: <strong><code>socketbug_connect_callback</code></strong></p>
+
+<p>This is an existing Javascript Function that exists in your own code and is loaded BEFORE any Socketbug files are loaded.  If you provide the function name ( Do Not Use Quotes ) that exists, it will get called when a Connection is made to Socketbug.  If you provide a function, that does not exists, it will generate a Javascript error.</p></li>
+<li><p><strong>OPTIONAL</strong>: <code>_sbs.disconnect_callback</code> <em>( Function )</em>: <strong><code>socketbug_disconnect_callback</code></strong></p>
+
+<p>This is an existing Javascript Function that exists in your own code and is loaded BEFORE any Socketbug files are loaded.  If you provide the function name ( Do Not Use Quotes ) that exists, it will get called when you are Disconnected Socketbug.  If you provide a function, that does not exists, it will generate a Javascript error.</p></li>
+<li><p><strong>OPTIONAL</strong>: <code>_sbs.message_callback</code> <em>( Function )</em>: <strong><code>socketbug_message_callback</code></strong></p>
+
+<p>This is an existing Javascript Function that exists in your own code and is loaded BEFORE any Socketbug files are loaded.  If you provide the function name ( Do Not Use Quotes ) that exists, it will get called when a Message is sent to Socketbug.  If you provide a function, that does not exists, it will generate a Javascript error.</p></li>
+</ul>
+
+<p>There are only two more items that need you attention.  The last line that loads the Javascript file has to Paths that need to be set correctly.  Here is what you are looking for:</p>
+
+<pre><code>&lt;script type="text/javascript" data-main="http://localhost/socketbug/client/application/lib/init" src="http://localhost/socketbug/client/application/sb.js" async&gt;&lt;/script&gt;
+</code></pre>
+
+<p>That parts that need your attention are:</p>
+
+<ul>
+<li><p><code>src="http://localhost/socketbug/client/application/sb.js"</code></p>
+
+<p>This will need to be set to either an absolute or relative path to wherever your <code>sb.js</code> file is located.  This is the file that is locate in <code>./client/application/sb.js</code> inside the Socketbug Repository.  This <code>sb.js</code> enables functionality to load other Javascript files in sequence to assure everything is loaded in the proper order.  You do not need to make any modifications to this file.  The file will work as is.</p></li>
+<li><p><code>data-main="http://localhost/socketbug/client/application/lib/init"</code></p>
+
+<p>This will need to be set to either an absolute or relative path to wherever your <code>init.js</code> file is located.  This is the file that is locate in <code>./client/application/lib/init.js</code> inside the Socketbug Repository.  You do not need to include the .js file extension. This <code>init.js</code> contains the instructions to load specific files in a specific order.  You do not need to make any modifications to this file.  The file will work as is.</p></li>
+</ul>
+
+<h3 id="can_i_see_an_example">Can I See an Example?</h3>
+
+<p>We have set up an example Application that contains the Javascript Code you will need to connect to any Socketbug Client.  You can find the example in the <strong>./client/example/</strong> folder.  Just open the index.html file and look at the source code for a thorough example of how to set everything up.</p>
+
+<p>You can access the example from your web browser after downloading the code ( as instructed above ) by going to:</p>
+
+<p>http://localhost/socketbug/client/example</p>
+
+<h2 id="3_run_your_application">#3 Run Your Application</h2>
+
+<p>OK, now that you have setup your Application with the Socketbug Javascript, you are ready to connect.</p>
+
+<p>If you have set a <code>_sbs.connect_callback</code> callback handler in your javascript, you will be able to capture when Socketbug made a successful connection.</p>
+
+<p>Another way to tell you are connected is to access the Socketbug Server running in a Terminal window and you should see a &#8220;Handshake&#8221; being made when your device connects.</p>
+
+<h1 id="so_now_what">So Now What?!?</h1>
+
+<p>That that your application code is up and running, you can use the Socketbug Console to communicate with it.  You will be able to do some pretty cool stuff, like:</p>
+
+<ul>
+<li><p><strong>View Source Code</strong></p></li>
+<li><p><strong>View Debugging Information</strong></p></li>
+<li><p><strong>Execute Javascript</strong></p></li>
+<li><p><strong>Capture Javascript Errors</strong> <em>( on browsers that support <code>window.onerror</code> - Sorry Safari )</em></p></li>
+</ul>
+
+<p>Ideally, you can setup your application to just use try/catch blocks in your Javascript to capture any Javascript errors.</p>
+
+<p><strong>Socketbug is already setup to Capture ALL debug events.</strong></p>
+
+<p>So if you are already using things like &#8230;</p>
+
+<ul>
+<li><p><code>debug.log();</code></p></li>
+<li><p><code>debug.debug();</code></p></li>
+<li><p><code>debug.info();</code></p></li>
+<li><p><code>debug.warn();</code></p></li>
+<li><p><code>debug.error();</code></p></li>
+</ul>
+
+<p>&#8230; you will be pleased to know that these messages will automatically be sent to Socketbug.</p>
+
+<h3 id="so_now_you_just_need_to_install_the_socketbug_console">So now you just need to <a href="install_console.html">Install the Socketbug Console</a>.</h3>
 
 </body>
 </html>

@@ -1,69 +1,109 @@
 /**
  * Socketbug - Web Socket Remote Debugging
- *
- * @version v0.2.0 ( 6/25/2011 )
- *
- * @link Website: http://www.socketbug.com
- * @link Twitter: http://www.twitter.com/socketbug_dev
- * @link Source: http://github.com/manifestinteractive/socketbug
- * @link Support & Feature Requests: http://socketbug.userecho.com
  * 
- * @copyright Copyright (c) 2011 Manifest Interactive, LLC
+ * Copyright (c) 2011 Manifest Interactive, LLC
  *
- * @license Licensed under the LGPL v3 licenses.
+ * Licensed under the LGPL v3 licenses.
+ *
+ * @version v0.2.0 ( 6/29/2011 )
+ *
+ * @author <a href="http://www.socketbug.com">Website</a>
+ * @author <a href="http://www.vimeo.com/user7532036/videos">Video Tutorials ( HD )</a>
+ * @author <a href="http://www.twitter.com/socketbug_dev">Twitter</a>
+ * @author <a href="http://github.com/manifestinteractive/socketbug">Source Code</a>
+ * @author <a href="http://socketbug.userecho.com">Support & Feature Requests</a>
  */
 
 if(typeof(socketbug) === 'undefined')
 {
-	var encryption_salt = 'Ch4ng3^M3';
+	/**
+	 * @private
+	 */
+	var _encryption_salt = 'Ch4ng3^M3';
 	
+	/**
+	 * @namespace Socketbug Console 
+	 */
 	var socketbug = {
 
-		/* Check if we're connected to Socketbug */
+		/** 
+		 * Check if we're connected to Socketbug 
+		 * 
+		 * @param {Boolean} connected
+		 */
 		connected: false,
 		
-		/* Store Socketbug Session ID */
+		/**
+		 * Store Socketbug Session ID 
+		 * 
+		 * @param {String} session_id
+		 */
 		session_id: null,
 		
-		/* Define Group Data */
+		/** 
+		 * Define Group Data 
+		 * 
+		 * @param {Object} group
+		 */
 		group:
 		{
-			'id': hex_md5(encryption_salt + _sbs.group_id),
+			'id': hex_md5(_encryption_salt + _sbs.group_id),
 			'name': _sbs.group_name
 		}, 
 		
-		/* Define Application Data */
+		/** 
+		 * Define Application Data 
+		 * 
+		 * @param {Object} application
+		 */
 		application:
 		{
-			'id': hex_md5(encryption_salt + _sbs.application_id),
+			'id': hex_md5(_encryption_salt + _sbs.application_id),
 			'name': _sbs.application_name
 		}, 
 		
-		/* Define Client Data */
+		/** 
+		 * Define Client Data 
+		 * 
+		 * @param {Object} client
+		 */
 		client:
 		{
-			'id': hex_md5(encryption_salt + GUID.create()),
+			'id': hex_md5(_encryption_salt + GUID.create()),
 			'name': ''
 		}, 
 		
 		/** 
 		 * Debug Level
 		 * 
-		 * 5 = log, debug, info, warn, & error
-		 * 4 = debug, info, warn, & error
-		 * 3 = info, warn, & error
-		 * 2 = warn, & error
-		 * 1 = error
-		 * 0 = disable all debug messages
+		 * @example 5 = log, debug, info, warn, & error
+		 * @example 4 = debug, info, warn, & error
+		 * @example 3 = info, warn, & error
+		 * @example 2 = warn, & error
+		 * @example 1 = error
+		 * @example 0 = disable all debug messages
+		 * 
+		 * @param {Number} debug_level This is set in the HTML Configuration
 		 */
 		debug_level: _sbs.debug_level,
 		
-		/* Setup Socket.io to Listen to Server */
+		/** Socketbug Server Comminication */
 		sb_manager: io.connect(_sbs.host + ':' + _sbs.port + '/sb_manager'),
+		
+		/** Socketbug Appliction Comminication */
 		sb_application: io.connect(_sbs.host + ':' + _sbs.port + '/sb_application'),
+		
+		/** Socketbug Console Comminication */
 		sb_console: io.connect(_sbs.host + ':' + _sbs.port + '/sb_console'),
 		
-		/* Setup Ouput Log for Console */
+		/** 
+		 * Setup Ouput Log for Console 
+		 * 
+		 * @function
+		 * @param {String} message This is the message to Log
+		 * @param {String} level The is the Debug Level
+		 * @param {String} mode This is the Mode ( application | console )
+		 */
 		log: function(message, level, mode)
 		{
 			/* Prepare Variables for the Log */
@@ -119,7 +159,12 @@ if(typeof(socketbug) === 'undefined')
 			
 		},
 		
-		/* Send Javascript Command */
+		/** 
+		 * Send Javascript Command
+		 * 
+		 * @function
+		 * @param {String} javascript Command to Execute
+		 */
 		js: function(javascript)
 		{
 			/**
@@ -158,13 +203,17 @@ if(typeof(socketbug) === 'undefined')
 			}
 		},
 		
-		/* Get Source Code */
+		/** 
+		 * Get Source Code
+		 * 
+		 * @function
+		 */
 		view_source: function()
 		{
-			/* Start Loading Animation */
+			/** Start Loading Animation */
 			jQuery('#loading').fadeIn('fast');
 		
-			/* Send JSON to Socketbug Server */
+			/** Send JSON to Socketbug Server */
 			socketbug.sb_application.emit('view_source', 
 				function()
 				{ 
@@ -174,14 +223,23 @@ if(typeof(socketbug) === 'undefined')
 		}
 	};
 	
-	/* Capture Connecting Event */
+	/** 
+	 * Capture Connecting Event
+	 * 
+	 * @function
+	 * @param {String} transport_type Connecting Transport Type
+	 */
 	socketbug.sb_manager.on('connecting', function (transport_type)
 	{
 		socketbug.log('Attempting to connect to Socketbug via ' + transport_type + '...', 'log', 'console');
 		socketbug.connected = false;
 	});
 
-	/* Capture Connect Event */
+	/** 
+	 * Capture Connect Event
+	 * 
+	 * @function
+	 */
 	socketbug.sb_manager.on('connect', function ()
 	{
 		/* Stop Loading Animation */
@@ -231,13 +289,23 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 	
-	/* Capture Responses from Socketbug Manager */
+	/** 
+	 * Capture Responses from Socketbug Manager
+	 * 
+	 * @function
+	 * @param {String} message Manager Response Message
+	 * @param {String} level Manager Response Level
+	 */
 	socketbug.sb_manager.on('manager_response', function (message, level)
 	{
 		socketbug.log(message, level, 'console');
 	});	
 
-	/* Capture Connect Failed Event */
+	/** 
+	 * Capture Connect Failed Event
+	 * 
+	 * @function
+	 */
 	socketbug.sb_manager.on('connect_failed', function ()
 	{
 		/* Stop Loading Animation */
@@ -252,7 +320,13 @@ if(typeof(socketbug) === 'undefined')
 		
 	});
 	
-	/* Capture Remote Debug Application Message */
+	/** 
+	 * Capture Remote Debug Application Message
+	 * 
+	 * @function
+	 * @param {String} level Debug Level
+	 * @param {Object} data Debug Data
+	 */
 	socketbug.sb_console.on('application_debug', function (level, data)
 	{
 		/* Check the Debug Level */
@@ -325,7 +399,13 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 
-	/* Capture Failed Authentication Event */
+	/** 
+	 * Capture Failed Authentication Event
+	 * 
+	 * @function
+	 * @param {Boolean} group_valid 
+	 * @param {Boolean} application_valid 
+	 */
 	socketbug.sb_manager.on('authentication_failed', function (group_valid, application_valid)
 	{		
 		if( !group_valid)
@@ -343,7 +423,12 @@ if(typeof(socketbug) === 'undefined')
 		socketbug.sb_console.disconnect();
 	});
 	
-	/* Capture Message Event */
+	/** 
+	 * Capture Message Event
+	 * 
+	 * @function
+	 * @param {String} src HTML Source Code
+	 */
 	socketbug.sb_console.on('view_source', function (src)
 	{
 		socketbug.log('Received Source Code', 'info', 'console');
@@ -374,14 +459,22 @@ if(typeof(socketbug) === 'undefined')
 		jQuery('#loading').fadeOut('slow');
 	});
 
-	/* Capture Close Event */
+	/** 
+	 * Capture Close Event
+	 * 
+	 * @function
+	 */
 	socketbug.sb_manager.on('close', function ()
 	{
 		socketbug.log('Connection to Socketbug Closed', 'warn', 'console');
 		socketbug.connected = false;
 	});
 
-	/* Capture Disconnect Event */
+	/** 
+	 * Capture Disconnect Event
+	 * 
+	 * @function
+	 */
 	socketbug.sb_manager.on('disconnect', function ()
 	{
 		/* Toggle Connection Indicator to OFF Position */
@@ -397,27 +490,43 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 
-	/* Capture Reconnect Event */
+	/** 
+	 * Capture Reconnect Event
+	 * 
+	 * @function
+	 * @param {String} transport_type 
+	 * @param {Number} reconnectionAttempts 
+	 */
 	socketbug.sb_manager.on('reconnect', function (transport_type, reconnectionAttempts)
 	{
 		socketbug.log('Successfully Reconnected to Socketbug via ' + transport_type + ' with Attempt #' + reconnectionAttempts, 'log', 'console');
 		socketbug.connected = false;
 	});
 
-	/* Capture Reconnecting Event */
+	/** 
+	 * Capture Reconnecting Event
+	 * 
+	 * @function
+	 * @param {Number} reconnectionDelay 
+	 * @param {Number} reconnectionAttempts 
+	 */
 	socketbug.sb_manager.on('reconnecting', function (reconnectionDelay, reconnectionAttempts)
 	{
 		socketbug.log('Attempt #' + reconnectionAttempts + ' at Reconnecting to Socketbug...', 'warn', 'console');
 		socketbug.connected = false;
 	});
 
-	/* Capture Close Event */
+	/** 
+	 * Capture Close Event
+	 * 
+	 * @function
+	 */
 	socketbug.sb_manager.on('reconnect_failed', function ()
 	{
 		socketbug.log('Failed to Reconnect to Socketbug', 'error', 'console');
 		socketbug.connected = false;
 	});
 	
-	/* Set Debug Level for Socketbug Console */
+	/** Set Debug Level for Socketbug Console */
 	debug.setLevel(socketbug.debug_level);
 }

@@ -1,69 +1,108 @@
 /**
  * Socketbug - Web Socket Remote Debugging
- *
- * @version v0.2.0 ( 6/25/2011 )
- *
- * @link Website: http://www.socketbug.com
- * @link Twitter: http://www.twitter.com/socketbug_dev
- * @link Source: http://github.com/manifestinteractive/socketbug
- * @link Support & Feature Requests: http://socketbug.userecho.com
  * 
- * @copyright Copyright (c) 2011 Manifest Interactive, LLC
+ * Copyright (c) 2011 Manifest Interactive, LLC
  *
- * @license Licensed under the LGPL v3 licenses.
+ * Licensed under the LGPL v3 licenses.
+ *
+ * @version v0.2.0 ( 6/29/2011 )
+ *
+ * @author <a href="http://www.socketbug.com">Website</a>
+ * @author <a href="http://www.vimeo.com/user7532036/videos">Video Tutorials ( HD )</a>
+ * @author <a href="http://www.twitter.com/socketbug_dev">Twitter</a>
+ * @author <a href="http://github.com/manifestinteractive/socketbug">Source Code</a>
+ * @author <a href="http://socketbug.userecho.com">Support & Feature Requests</a>
  */
 
 if(typeof(socketbug) === 'undefined')
 {	
-	var encryption_salt = 'Ch4ng3^M3';
+	/**
+	 * @private
+	 */
+	var _encryption_salt = 'Ch4ng3^M3';
 	
+	/**
+	 * @namespace Socketbug Console 
+	 */
 	var socketbug = {
 
-		/* Check if we're connected to Socketbug */
+		/** 
+		 * Check if we're connected to Socketbug 
+		 * 
+		 * @param {Boolean} connected
+		 */
 		connected: false,
 		
-		/* Store Socketbug Session ID */
+		/**
+		 * Store Socketbug Session ID 
+		 * 
+		 * @param {String} session_id
+		 */
 		session_id: null,
 		
-		/* Define Group Data */
+		/** 
+		 * Define Group Data 
+		 * 
+		 * @param {Object} group
+		 */
 		group:
 		{
-			'id': hex_md5(encryption_salt + _sbs.group_id),
+			'id': hex_md5(_encryption_salt + _sbs.group_id),
 			'name': _sbs.group_name
 		}, 
 		
-		/* Define Application Data */
+		/** 
+		 * Define Application Data 
+		 * 
+		 * @param {Object} application
+		 */
 		application:
 		{
-			'id': hex_md5(encryption_salt + _sbs.application_id),
+			'id': hex_md5(_encryption_salt + _sbs.application_id),
 			'name': _sbs.application_name
 		}, 
 		
-		/* Define Client Data */
+		/** 
+		 * Define Client Data 
+		 * 
+		 * @param {Object} client
+		 */
 		client:
 		{
-			'id': hex_md5(encryption_salt + GUID.create()),
+			'id': hex_md5(_encryption_salt + GUID.create()),
 			'name': ''
 		}, 
 		
 		/** 
 		 * Debug Level
 		 * 
-		 * 5 = log, debug, info, warn, & error
-		 * 4 = debug, info, warn, & error
-		 * 3 = info, warn, & error
-		 * 2 = warn, & error
-		 * 1 = error
-		 * 0 = disable all debug messages
+		 * @example 5 = log, debug, info, warn, & error
+		 * @example 4 = debug, info, warn, & error
+		 * @example 3 = info, warn, & error
+		 * @example 2 = warn, & error
+		 * @example 1 = error
+		 * @example 0 = disable all debug messages
+		 * 
+		 * @param {Number} debug_level This is set in the HTML Configuration
 		 */
 		debug_level: _sbs.debug_level,
 		
-		/* Setup Socket.io to Listeners to Servers Application Sockets */
+		/** Socketbug Server Comminication */
 		sb_manager: io.connect(_sbs.host + ':' + _sbs.port + '/sb_manager'),
+		
+		/** Socketbug Appliction Comminication */
 		sb_application: io.connect(_sbs.host + ':' + _sbs.port + '/sb_application'),
+		
+		/** Socketbug Console Comminication */
 		sb_console: io.connect(_sbs.host + ':' + _sbs.port + '/sb_console'),
 		
-		/* Setup Ouput Log for Console */
+		/** 
+		 * Setup Ouput Log for Console 
+		 * 
+		 * @function
+		 * @param {String} message This is the message to Log
+		 * @param {String} level The is the Debug Level
+		 */
 		log: function(message, level)
 		{
 			/**
@@ -110,7 +149,12 @@ if(typeof(socketbug) === 'undefined')
 			}			
 		},
 		
-		/* Capture All Debug Events and send them through Socketbug */
+		/** 
+		 * Capture All Debug Events and send them through Socketbug
+		 * 
+		 * @function
+		 * @param {String} level The is the Debug Level
+		 */
 		debug: function(level)
 		{
 			var args = Array.prototype.slice.call(arguments, 1);
@@ -128,7 +172,7 @@ if(typeof(socketbug) === 'undefined')
 	/*            Socketbug Socket.IO Manager             */
 	/* ================================================== */
 	
-	/* Capture Connect Event */
+	/** Capture Connect Event */
 	socketbug.sb_manager.on('connect', function()
 	{		
 		if(socketbug.connected === false)
@@ -166,7 +210,7 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 	
-	/* Capture Failed Authentication Event */
+	/** Capture Failed Authentication Event */
 	socketbug.sb_manager.on('authentication_failed', function (group_valid, application_valid)
 	{		
 		if( !group_valid)
@@ -178,18 +222,18 @@ if(typeof(socketbug) === 'undefined')
 			alert('You are Not Authorized to use Socketbug. Your Application ID is Invalid.');
 		}
 		
-		/* Disconnect Client from Socketbug Services */
+		/** Disconnect Client from Socketbug Services */
 		socketbug.sb_manager.disconnect();
 		socketbug.sb_application.disconnect();
 		socketbug.sb_console.disconnect();
 	});
 	
-	/* Capture Failed Authentication Event */
+	/** Capture Failed Authentication Event */
 	socketbug.sb_application.on('execute_js', function (javascript)
 	{		
 		try
 		{
-			/* I know... this is an eval() ... I am pure EVIL() */
+			/** I know... this is an eval() ... I am pure EVIL() */
 			eval(javascript);
 		}
 		catch(error)
@@ -198,20 +242,22 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 	
-	/* Capture Failed Authentication Event */
-	socketbug.sb_application.on('view_source', function ()
+	/** Capture Failed Authentication Event */
+	socketbug.sb_application.on('fetch_source', function ()
 	{		
 		try
 		{
-			/* Yes... another eval() ... you're just going to have to get over it, or tell me a better way! */
+			/** Fetch Source Code */
 			var source_code = document.getElementsByTagName("html")[0].innerHTML;
 			
-			/* Replace Characters that can cause issues on some browsers */
+			/** Replace Characters that can cause issues on some browsers */
 			source_code = source_code.replace(/</g,'&lt;');
 			source_code = source_code.replace(/>/g,'&gt;');
 			
-			/* Send to Specific Client */
+			/** Send to Specific Client */
 			socketbug.sb_console.emit('view_source', source_code);
+			
+			socketbug.log('Console Requested Source Code', 'info');
 		}
 		catch(error)
 		{
@@ -219,7 +265,7 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 	
-	/* Capture Connect Event */
+	/** Capture Connect Event */
 	socketbug.sb_manager.on('disconnect', function()
 	{
 		/* Do Callback if one set */
@@ -229,15 +275,15 @@ if(typeof(socketbug) === 'undefined')
 		}
 	});
 	
-	/* Capture Responses from Socketbug Manager */
+	/** Capture Responses from Socketbug Manager */
 	socketbug.sb_manager.on('manager_response', function (message, level)
 	{
 		socketbug.log(message, level);
 	});	
 	
-	/* Configure Callback Handler to use Socketbug */
+	/** Configure Callback Handler to use Socketbug */
 	debug.setCallback(socketbug.debug, true);
 	
-	/* Set Debug Level for Socketbug Console */
+	/** Set Debug Level for Socketbug Console */
 	debug.setLevel(socketbug.debug_level);
 }
