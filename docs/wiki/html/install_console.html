@@ -127,7 +127,7 @@ var _sbs = _sbs || {
 
 };
 &lt;/script&gt;
-&lt;script type="text/javascript" data-main="http://localhost/socketbug/client/console/lib/init" src="http://localhost/socketbug/client/console/sb.js" async&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="http://localhost/socketbug/client/console/sb.js" async&gt;&lt;/script&gt;
 </code></pre>
 
 <p>Before you try to connect, you will need to update some of the variables.  Here is an explanation of what each of them are, and what they do in Socketbug.  The ones labeled as <strong>REQUIRED</strong> are just that. Socketbug will fail if these are not set.  The ones labeled <strong>OPTIONAL</strong> can be left out entirely with no issues.</p>
@@ -196,9 +196,6 @@ var _sbs = _sbs || {
 <li><p><code>src="http://localhost/socketbug/client/console/sb.js"</code></p>
 
 <p>This will need to be set to either an absolute or relative path to wherever your <code>sb.js</code> file is located.  This is the file that is locate in <code>./client/console/sb.js</code> inside the Socketbug Repository.  This <code>sb.js</code> enables functionality to load other Javascript files in sequence to assure everything is loaded in the proper order.  You do not need to make any modifications to this file.  The file will work as is.</p></li>
-<li><p><code>data-main="http://localhost/socketbug/client/console/lib/init"</code></p>
-
-<p>This will need to be set to either an absolute or relative path to wherever your <code>init.js</code> file is located.  This is the file that is locate in <code>./client/console/lib/init.js</code> inside the Socketbug Repository.  You do not need to include the .js file extension. This <code>init.js</code> contains the instructions to load specific files in a specific order.  You do not need to make any modifications to this file.  The file will work as is.</p></li>
 </ul>
 
 <h2 id="3_open_the_console">#3 Open the Console</h2>
