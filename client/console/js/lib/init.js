@@ -14,14 +14,14 @@
  * @author <a href="http://socketbug.userecho.com">Support & Feature Requests</a>
  */
 
-var helpers = _sbs.helpers;
-var libraries = _sbs.libraries;
-var plugins = _sbs.plugins;
+var helpers = (typeof(_sbs.helpers) != 'undefined') ? _sbs.helpers:new Array();
+var libraries = (typeof(_sbs.libraries) != 'undefined') ? _sbs.libraries:new Array();
+var plugins = (typeof(_sbs.plugins) != 'undefined') ? _sbs.plugins:new Array();
 
 require(
 	/* Set Base URL Path */
 	{ 
-		baseUrl: './js/' 
+		baseUrl: sb_base+'js/' 
 	},
 	
 	/* Load Required Files First */

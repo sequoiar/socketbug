@@ -109,7 +109,7 @@ Go ahead and open this file in your favorite text editor so we can make some cha
 		
 	};
 	</script>
-	<script type="text/javascript" data-main="http://localhost/socketbug/client/console/lib/init" src="http://localhost/socketbug/client/console/sb.js" async></script>
+	<script type="text/javascript" src="http://localhost/socketbug/client/console/sb.js" async></script>
 
 Before you try to connect, you will need to update some of the variables.  Here is an explanation of what each of them are, and what they do in Socketbug.  The ones labeled as **REQUIRED** are just that. Socketbug will fail if these are not set.  The ones labeled **OPTIONAL** can be left out entirely with no issues.
 
@@ -176,17 +176,13 @@ Before you try to connect, you will need to update some of the variables.  Here 
 
 There are only two more items that need you attention.  The last line that loads the Javascript file has to Paths that need to be set correctly.  Here is what you are looking for:
 
-	<script type="text/javascript" data-main="http://localhost/socketbug/client/console/lib/init" src="http://localhost/socketbug/client/console/sb.js" async></script>
+	<script type="text/javascript" src="http://localhost/socketbug/client/console/sb.js" async></script>
 
 That parts that need your attention are:
 
  * `src="http://localhost/socketbug/client/console/sb.js"`
 
 	This will need to be set to either an absolute or relative path to wherever your `sb.js` file is located.  This is the file that is locate in `./client/console/sb.js` inside the Socketbug Repository.  This `sb.js` enables functionality to load other Javascript files in sequence to assure everything is loaded in the proper order.  You do not need to make any modifications to this file.  The file will work as is.
-	
- * `data-main="http://localhost/socketbug/client/console/lib/init"`
-
-	This will need to be set to either an absolute or relative path to wherever your `init.js` file is located.  This is the file that is locate in `./client/console/lib/init.js` inside the Socketbug Repository.  You do not need to include the .js file extension. This `init.js` contains the instructions to load specific files in a specific order.  You do not need to make any modifications to this file.  The file will work as is.
 
 ## #3 Open the Console
 
