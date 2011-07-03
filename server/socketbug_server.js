@@ -118,15 +118,12 @@ if(typeof(socketbug) === 'undefined')
 
 		/** Configure Socket.IO */
 		io.configure('production', function () {
-			io.set('polling duration', 20);
 			io.set('log level', 1);
 		});
 		io.configure('development', function () {
-			io.set('polling duration', 60);
 			io.set('log level', 3);
 		});
 		io.configure(function () {
-			io.set('polling duration', 60);
 			io.set('log level', 2);
 		});
 
